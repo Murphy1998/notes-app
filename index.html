@@ -1030,7 +1030,7 @@ function render() {
 
       if (isMemo) {
         // 备忘型卡片：点击展开/收起
-        const contentHtml = n.content ? `<div class="card-content">${escapeHtml(n.content)}</div>` : '';
+        const contentHtml = n.content ? `<div class="card-content">${escapeHtml(n.content).replace(/\n/g, '<br>')}</div>` : '';
         const copyId = 'copy-' + (n.id || Math.random().toString(36).slice(2));
         const isLocal = n._local;
         const deleteBtn = isLocal ? `<button class="card-delete-btn" onclick="event.stopPropagation();deleteLocalNote('${(n.id || '').replace(/'/g, "\\'")}')">删除</button>` : '';
