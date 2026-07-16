@@ -355,7 +355,7 @@
   }
 
   .card.card-memo.expanded .card-content {
-    max-height: 600px;
+    max-height: 2000px;
     opacity: 1;
     margin-top: 12px;
     padding-top: 12px;
@@ -474,16 +474,18 @@ const __DATA__ = {
     },
     {
       "id": "n003",
-      "title": "iPhone 上安装个人笔记 App 指南",
+      "title": "从零开始：用 AI 开发笔记应用并部署到 iPhone",
       "category": "效率工具",
       "tags": [
         "PWA",
         "iOS",
         "教程",
-        "笔记工具"
+        "笔记工具",
+        "GitHub Pages",
+        "CatPaw"
       ],
-      "summary": "三步将笔记网页变成 iPhone 独立 App，全屏运行、支持离线查看。",
-      "content": "Step 1：用 Safari 打开 murphy1998.github.io/notes-app\nStep 2：点底部中间的「分享」按钮（方框+箭头图标）\nStep 3：选「添加到主屏幕」→ 点「添加」\n\n完成后主屏幕会出现一个绿色笔记本图标，点开即为全屏独立 App，体验接近原生应用，支持离线查看已缓存的笔记。",
+      "summary": "完整记录了如何用 AI 工具从 0 到 1 开发一个 flomo 风格的笔记网页应用，部署到 GitHub Pages，最后变成 iPhone 上的独立 App。零代码基础也能照做。",
+      "content": "一、用 AI 开发笔记网页应用\n\n工具：CatPaw（美团内部 AI 助手）\nPrompt 示例：「帮我开发一个笔记整理小工具，我每次会将笔记发给你，你分门别类放进去，放进链接及关键纪要总结」\n\nAI 会自动完成以下工作：\n· 设计数据结构（database.json）：每条笔记包含标题、链接、分类、标签、摘要、来源、时间\n· 设计分类体系：AI与机器学习 / 编程技术 / 产品与设计 / 效率工具 / 阅读与思考 / 其他\n· 生成可视化界面（viewer.html）：flomo 风格的卡片流布局，支持搜索、分类筛选、标签导航\n· 区分两种笔记类型：链接型（点击跳转原文）和备忘型（点击展开/收起详情）\n\n后续添加笔记只需发消息，例如：\n「新增笔记：React 19 新特性 https://xxx.com」\nAI 自动识别内容 → 归类 → 生成摘要 → 打标签 → 更新页面\n\n二、部署到线上（GitHub Pages）\n\n1. 注册 GitHub 账号：github.com\n2. 创建新仓库：点右上角 + → New repository → 仓库名填 notes-app → 选 Public → 不勾选 README → Create\n3. 推送代码：让 AI 帮你执行 git init / git add / git commit / git push（需要生成 Personal Access Token）\n4. 启用 Pages：进入仓库 → Settings → Pages → Source 选 Deploy from a branch → Branch 选 main，路径选 / (root) → Save\n5. 等待 1-2 分钟，访问 https://你的用户名.github.io/notes-app/ 即可看到页面\n\n生成 Token 的方法：\n· 打开 github.com/settings/tokens → Generate new token (classic)\n· 勾选 repo 权限 → Generate token → 复制 token 给 AI 用于推送\n\n三、将网页变成 iPhone 独立 App（PWA）\n\nAI 会自动改造页面为 PWA（渐进式 Web 应用），添加以下文件：\n· manifest.json：App 名称、图标、主题色等配置\n· sw.js：离线缓存，无网络也能查看已加载的笔记\n· 多尺寸图标：自动生成 72px ~ 512px 的 App 图标\n\n在 iPhone 上安装：\n1. 用 Safari 打开你的 GitHub Pages 链接\n2. 点底部中间的「分享」按钮（方框 + 向上箭头图标）\n3. 往下滑找到「添加到主屏幕」\n4. 点「添加」\n\n完成后主屏幕出现绿色笔记本图标，点开就是全屏独立 App，没有浏览器地址栏，体验接近原生应用。\n\n注意事项：\n· 必须用 Safari，Chrome 不支持 iOS 上的 PWA 安装\n· 页面必须通过 HTTPS 访问（GitHub Pages 默认支持）\n· 离线模式下只能查看已缓存的笔记，新内容需联网刷新",
       "source": "自整理",
       "created_at": "2026-07-16T00:00:00+08:00"
     }
