@@ -365,6 +365,38 @@
     -webkit-line-clamp: unset;
   }
 
+  .card-copy-btn {
+    display: none;
+    position: absolute;
+    top: 16px;
+    right: 44px;
+    padding: 4px 10px;
+    font-size: 12px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--card-bg);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.2s;
+    z-index: 2;
+  }
+
+  .card.card-memo.expanded .card-copy-btn {
+    display: inline-block;
+  }
+
+  .card-copy-btn:hover {
+    background: var(--accent-light);
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+
+  .card-copy-btn.copied {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+  }
+
   /* ===== 空状态 ===== */
   .empty-state {
     text-align: center;
@@ -523,8 +555,12 @@ function formatDateGroup(dateStr) {
   return `${y}年${m}月${day}日 ${weekdays[d.getDay()]}`;
 }
 
+function getAllNotes() {
+  return [...__DATA__.notes];
+}
+
 function getFilteredNotes() {
-  let notes = [...__DATA__.notes];
+  let notes = getAllNotes();
 
   // 分类筛选
   if (activeCategory !== '全部') {
@@ -646,7 +682,9 @@ function render() {
       if (isMemo) {
         // 备忘型卡片：点击展开/收起
         const contentHtml = n.content ? `<div class="card-content">${escapeHtml(n.content)}</div>` : '';
+        const copyId = 'copy-' + (n.id || Math.random().toString(36).slice(2));
         return `<div class="card card-memo" onclick="toggleMemo(this)">
+          <button class="card-copy-btn" id="${copyId}" onclick="event.stopPropagation();copyNote(this, '${(n.id || '').replace(/'/g, "\\'")}')" title="复制全文">复制</button>
           <span class="card-memo-icon">▼</span>
           <div class="card-title">${escapeHtml(n.title || '无标题')}</div>
           <div class="card-summary">${escapeHtml(n.summary || '暂无摘要')}</div>
@@ -687,6 +725,42 @@ function escapeHtml(str) {
 
 function toggleMemo(el) {
   el.classList.toggle('expanded');
+}
+
+function copyNote(btn, noteId) {
+  const allNotes = getAllNotes();
+  const note = allNotes.find(n => n.id === noteId);
+  if (!note) return;
+
+  let text = note.title + '\n\n';
+  if (note.summary) text += note.summary + '\n\n';
+  if (note.content) text += note.content;
+  if (note.link) text += '\n\n链接：' + note.link;
+
+  navigator.clipboard.writeText(text.trim()).then(() => {
+    btn.textContent = '已复制';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.textContent = '复制';
+      btn.classList.remove('copied');
+    }, 1500);
+  }).catch(() => {
+    // fallback
+    const ta = document.createElement('textarea');
+    ta.value = text.trim();
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    btn.textContent = '已复制';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.textContent = '复制';
+      btn.classList.remove('copied');
+    }, 1500);
+  });
 }
 
 function selectCategory(cat) {
