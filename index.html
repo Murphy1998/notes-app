@@ -319,6 +319,52 @@
     opacity: 1;
   }
 
+  /* ===== 备忘型卡片 ===== */
+  .card.card-memo {
+    cursor: pointer;
+    border-left: 3px solid var(--accent);
+  }
+
+  .card-memo-icon {
+    position: absolute;
+    top: 18px;
+    right: 20px;
+    color: var(--text-muted);
+    font-size: 12px;
+    transition: transform 0.3s;
+  }
+
+  .card.card-memo.expanded .card-memo-icon {
+    transform: rotate(180deg);
+  }
+
+  .card-content {
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.8;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px dashed var(--border);
+    white-space: pre-wrap;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.35s ease, opacity 0.25s ease, margin-top 0.3s ease, padding-top 0.3s ease;
+    margin-top: 0;
+    padding-top: 0;
+  }
+
+  .card.card-memo.expanded .card-content {
+    max-height: 600px;
+    opacity: 1;
+    margin-top: 12px;
+    padding-top: 12px;
+  }
+
+  .card.card-memo.expanded .card-summary {
+    -webkit-line-clamp: unset;
+  }
+
   /* ===== 空状态 ===== */
   .empty-state {
     text-align: center;
@@ -429,7 +475,6 @@ const __DATA__ = {
     {
       "id": "n003",
       "title": "iPhone 上安装个人笔记 App 指南",
-      "link": "https://murphy1998.github.io/notes-app/",
       "category": "效率工具",
       "tags": [
         "PWA",
@@ -437,7 +482,8 @@ const __DATA__ = {
         "教程",
         "笔记工具"
       ],
-      "summary": "三步将笔记网页变成 iPhone 独立 App：1. 用 Safari 打开 murphy1998.github.io/notes-app；2. 点底部分享按钮；3. 选「添加到主屏幕」→ 点「添加」。添加后主屏幕出现绿色图标，全屏运行，支持离线查看。",
+      "summary": "三步将笔记网页变成 iPhone 独立 App，全屏运行、支持离线查看。",
+      "content": "Step 1：用 Safari 打开 murphy1998.github.io/notes-app\nStep 2：点底部中间的「分享」按钮（方框+箭头图标）\nStep 3：选「添加到主屏幕」→ 点「添加」\n\n完成后主屏幕会出现一个绿色笔记本图标，点开即为全屏独立 App，体验接近原生应用，支持离线查看已缓存的笔记。",
       "source": "自整理",
       "created_at": "2026-07-16T00:00:00+08:00"
     }
@@ -495,6 +541,7 @@ function getFilteredNotes() {
       const searchStr = [
         n.title || '',
         n.summary || '',
+        n.content || '',
         (n.tags || []).join(' '),
         n.source || '',
         n.category || ''
@@ -592,21 +639,35 @@ function render() {
         `<span class="card-tag" onclick="event.stopPropagation();selectTag('${t.replace(/'/g, "\\'")}')">#${t}</span>`
       ).join('');
 
-      const linkAttr = n.link ? `href="${n.link}" target="_blank" rel="noopener"` : '';
-      const extIcon = n.link ? '<span class="card-external-icon">↗</span>' : '';
+      const isMemo = !n.link;
 
-      const tag = n.link ? 'a' : 'div';
-
-      return `<${tag} class="card" ${linkAttr}>
-        ${extIcon}
-        <div class="card-title">${escapeHtml(n.title || '无标题')}</div>
-        <div class="card-summary">${escapeHtml(n.summary || '暂无摘要')}</div>
-        <div class="card-meta">
-          ${n.source ? `<span class="card-source">${escapeHtml(n.source)}</span>` : ''}
-          <span class="card-date">${formatDate(n.created_at)}</span>
-          <div class="card-tags">${tagsHtml}</div>
-        </div>
-      </${tag}>`;
+      if (isMemo) {
+        // 备忘型卡片：点击展开/收起
+        const contentHtml = n.content ? `<div class="card-content">${escapeHtml(n.content)}</div>` : '';
+        return `<div class="card card-memo" onclick="toggleMemo(this)">
+          <span class="card-memo-icon">▼</span>
+          <div class="card-title">${escapeHtml(n.title || '无标题')}</div>
+          <div class="card-summary">${escapeHtml(n.summary || '暂无摘要')}</div>
+          ${contentHtml}
+          <div class="card-meta">
+            ${n.source ? `<span class="card-source">${escapeHtml(n.source)}</span>` : ''}
+            <span class="card-date">${formatDate(n.created_at)}</span>
+            <div class="card-tags">${tagsHtml}</div>
+          </div>
+        </div>`;
+      } else {
+        // 链接型卡片：点击跳转
+        return `<a class="card" href="${n.link}" target="_blank" rel="noopener">
+          <span class="card-external-icon">↗</span>
+          <div class="card-title">${escapeHtml(n.title || '无标题')}</div>
+          <div class="card-summary">${escapeHtml(n.summary || '暂无摘要')}</div>
+          <div class="card-meta">
+            ${n.source ? `<span class="card-source">${escapeHtml(n.source)}</span>` : ''}
+            <span class="card-date">${formatDate(n.created_at)}</span>
+            <div class="card-tags">${tagsHtml}</div>
+          </div>
+        </a>`;
+      }
     }).join('');
 
     return `<div class="date-group">
@@ -620,6 +681,10 @@ function escapeHtml(str) {
   const div = document.createElement('div');
   div.textContent = str;
   return div.innerHTML;
+}
+
+function toggleMemo(el) {
+  el.classList.toggle('expanded');
 }
 
 function selectCategory(cat) {
