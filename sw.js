@@ -1,4 +1,4 @@
-const CACHE_NAME = 'my-notes-v1';
+const CACHE_NAME = 'my-notes-v2';
 const ASSETS = [
   './',
   './index.html',
@@ -8,7 +8,7 @@ const ASSETS = [
   './icons/apple-touch-icon.png'
 ];
 
-// 安装：预缓存核心资源
+// 安装：预缓存核心资源，立即接管
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME)
@@ -17,7 +17,7 @@ self.addEventListener('install', event => {
   );
 });
 
-// 激活：清理旧缓存
+// 激活：清理所有旧缓存
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys().then(keys =>
@@ -26,20 +26,24 @@ self.addEventListener('activate', event => {
   );
 });
 
-// 请求拦截：缓存优先，网络回退
+// 请求拦截：网络优先，离线回退缓存
 self.addEventListener('fetch', event => {
-  event.respondWith(
-    caches.match(event.request).then(cached => {
-      // 有缓存就用缓存，同时后台更新
-      const fetchPromise = fetch(event.request).then(response => {
-        if (response && response.status === 200) {
-          const clone = response.clone();
-          caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
-        }
-        return response;
-      }).catch(() => cached);
+  // GitHub API 请求不缓存
+  if (event.request.url.includes('api.github.com')) {
+    return;
+  }
 
-      return cached || fetchPromise;
+  event.respondWith(
+    fetch(event.request).then(response => {
+      // 网络成功，更新缓存
+      if (response && response.status === 200) {
+        const clone = response.clone();
+        caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
+      }
+      return response;
+    }).catch(() => {
+      // 网络失败，回退到缓存
+      return caches.match(event.request);
     })
   );
 });
