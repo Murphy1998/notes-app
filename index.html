@@ -1510,8 +1510,24 @@ if (checkAuth()) {
 
 // ===== PWA Service Worker =====
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js').then(reg => {
-    console.log('SW registered:', reg.scope);
+  // 先清理所有旧缓存
+  caches.keys().then(keys => keys.forEach(k => caches.delete(k)));
+  // 注销旧 SW 后重新注册，确保加载最新代码
+  navigator.serviceWorker.getRegistrations().then(regs => {
+    const p = regs.map(r => r.unregister());
+    return Promise.all(p);
+  }).then(() => {
+    navigator.serviceWorker.register('./sw.js?v=3').then(reg => {
+      reg.addEventListener('updatefound', () => {
+        const newWorker = reg.installing;
+        newWorker.addEventListener('statechange', () => {
+          if (newWorker.state === 'activated') {
+            console.log('SW updated, reloading...');
+          }
+        });
+      });
+      console.log('SW registered:', reg.scope);
+    });
   }).catch(err => {
     console.log('SW registration failed:', err);
   });
