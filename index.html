@@ -609,9 +609,111 @@
     .modal { padding: 16px 16px calc(16px + env(safe-area-inset-bottom)); }
     .fab { bottom: 20px; right: 20px; }
   }
+  /* ===== 密码锁屏 ===== */
+  .lock-screen {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: var(--bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+
+  .lock-screen.hidden { display: none; }
+
+  .lock-box {
+    text-align: center;
+    padding: 40px;
+  }
+
+  .lock-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+  }
+
+  .lock-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+
+  .lock-subtitle {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 24px;
+  }
+
+  .lock-input {
+    width: 200px;
+    padding: 12px 16px;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    font-size: 20px;
+    text-align: center;
+    letter-spacing: 8px;
+    background: var(--card-bg);
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.2s;
+    -webkit-text-security: disc;
+  }
+
+  .lock-input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px var(--accent-light);
+  }
+
+  .lock-input.error {
+    border-color: #c55;
+    animation: lockShake 0.4s ease;
+  }
+
+  @keyframes lockShake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-8px); }
+    40%, 80% { transform: translateX(8px); }
+  }
+
+  .lock-hint {
+    font-size: 12px;
+    color: #c55;
+    margin-top: 10px;
+    height: 18px;
+  }
+
+  .lock-btn {
+    margin-top: 16px;
+    padding: 10px 36px;
+    border: none;
+    border-radius: 10px;
+    background: var(--accent);
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+
+  .lock-btn:hover { opacity: 0.9; }
 </style>
 </head>
 <body>
+
+<!-- 密码锁屏 -->
+<div class="lock-screen" id="lockScreen">
+  <div class="lock-box">
+    <div class="lock-icon">🔒</div>
+    <div class="lock-title">我的笔记</div>
+    <div class="lock-subtitle">请输入密码访问</div>
+    <input class="lock-input" id="lockInput" type="tel" maxlength="10" placeholder="····" autofocus
+      onkeydown="if(event.key==='Enter')unlockApp()">
+    <div class="lock-hint" id="lockHint"></div>
+    <button class="lock-btn" onclick="unlockApp()">解锁</button>
+  </div>
+</div>
 
 <!-- 顶栏 -->
 <div class="topbar">
@@ -1108,6 +1210,42 @@ function deleteLocalNote(noteId) {
   const locals = getLocalNotes().filter(n => n.id !== noteId);
   saveLocalNotes(locals);
   render();
+}
+
+// ===== 密码锁 =====
+const __PWD_HASH__ = 'x20r';
+
+function simpleHash(str) {
+  let h = 0;
+  for (let i = 0; i < str.length; i++) {
+    h = ((h << 5) - h + str.charCodeAt(i)) | 0;
+  }
+  return h.toString(36);
+}
+
+function checkAuth() {
+  return sessionStorage.getItem('notes-auth') === __PWD_HASH__;
+}
+
+function unlockApp() {
+  const input = document.getElementById('lockInput');
+  const hint = document.getElementById('lockHint');
+  const pwd = input.value.trim();
+  if (simpleHash(pwd) === __PWD_HASH__) {
+    sessionStorage.setItem('notes-auth', __PWD_HASH__);
+    document.getElementById('lockScreen').classList.add('hidden');
+    hint.textContent = '';
+  } else {
+    input.classList.add('error');
+    hint.textContent = '密码错误，请重试';
+    input.value = '';
+    setTimeout(() => input.classList.remove('error'), 500);
+  }
+}
+
+// 初始化：检查是否已验证
+if (checkAuth()) {
+  document.getElementById('lockScreen').classList.add('hidden');
 }
 
 // ===== 初始渲染 =====
