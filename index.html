@@ -414,6 +414,190 @@
     line-height: 1.8;
   }
 
+  /* ===== 浮动新建按钮 ===== */
+  .fab {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    font-size: 28px;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(74,124,89,0.4);
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .fab:hover { transform: scale(1.1); box-shadow: 0 6px 20px rgba(74,124,89,0.5); }
+  .fab:active { transform: scale(0.95); }
+
+  /* ===== 弹窗遮罩 ===== */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.35);
+    z-index: 300;
+    align-items: flex-end;
+    justify-content: center;
+  }
+
+  .modal-overlay.show { display: flex; }
+
+  .modal {
+    background: var(--card-bg);
+    width: 100%;
+    max-width: 560px;
+    border-radius: 16px 16px 0 0;
+    padding: 20px 24px calc(20px + env(safe-area-inset-bottom));
+    box-shadow: 0 -4px 24px rgba(0,0,0,0.12);
+    animation: slideUp 0.25s ease;
+    max-height: 85vh;
+    overflow-y: auto;
+  }
+
+  @keyframes slideUp {
+    from { transform: translateY(100%); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  .modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+
+  .modal-header h3 {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .modal-close {
+    background: none;
+    border: none;
+    font-size: 22px;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 6px;
+  }
+
+  .modal-close:hover { background: var(--tag-bg); }
+
+  .form-group {
+    margin-bottom: 14px;
+  }
+
+  .form-group label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 5px;
+  }
+
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-family: inherit;
+    color: var(--text);
+    background: var(--bg);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .form-group input:focus,
+  .form-group textarea:focus,
+  .form-group select:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-light);
+  }
+
+  .form-group textarea {
+    min-height: 80px;
+    resize: vertical;
+  }
+
+  .form-row {
+    display: flex;
+    gap: 10px;
+  }
+
+  .form-row .form-group { flex: 1; }
+
+  .form-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 18px;
+  }
+
+  .btn {
+    flex: 1;
+    padding: 10px;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    transition: all 0.2s;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+  }
+
+  .btn-primary:hover { opacity: 0.9; }
+
+  .btn-secondary {
+    background: var(--card-bg);
+    color: var(--text-secondary);
+  }
+
+  .btn-secondary:hover { background: var(--tag-bg); }
+
+  /* ===== 本地笔记删除按钮 ===== */
+  .card-delete-btn {
+    display: none;
+    position: absolute;
+    bottom: 16px;
+    right: 20px;
+    padding: 3px 8px;
+    font-size: 11px;
+    border: 1px solid #e0c8c8;
+    border-radius: 6px;
+    background: #fff;
+    color: #b55;
+    cursor: pointer;
+    transition: all 0.2s;
+    z-index: 2;
+  }
+
+  .card.card-memo.expanded .card-delete-btn {
+    display: inline-block;
+  }
+
+  .card-delete-btn:hover {
+    background: #fde8e8;
+    border-color: #c88;
+  }
+
   /* ===== 响应式 ===== */
   @media (max-width: 600px) {
     .topbar-inner {
@@ -422,6 +606,8 @@
     }
     .search-box { order: 3; flex-basis: 100%; }
     .card { padding: 14px 16px; }
+    .modal { padding: 16px 16px calc(16px + env(safe-area-inset-bottom)); }
+    .fab { bottom: 20px; right: 20px; }
   }
 </style>
 </head>
@@ -454,6 +640,53 @@
 
   <!-- 卡片区 -->
   <div id="cardArea"></div>
+</div>
+
+<!-- 浮动新建按钮 -->
+<button class="fab" onclick="openNewNote()" title="新建笔记">+</button>
+
+<!-- 新建笔记弹窗 -->
+<div class="modal-overlay" id="modalOverlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="modalTitle">新建笔记</h3>
+      <button class="modal-close" onclick="closeModal()">&times;</button>
+    </div>
+    <div class="form-group">
+      <label>标题 *</label>
+      <input type="text" id="noteTitle" placeholder="笔记标题">
+    </div>
+    <div class="form-group">
+      <label>链接（可选，留空则为备忘笔记）</label>
+      <input type="url" id="noteLink" placeholder="https://...">
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>分类</label>
+        <select id="noteCategory"></select>
+      </div>
+      <div class="form-group">
+        <label>来源</label>
+        <input type="text" id="noteSource" placeholder="如：微信公众号">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>标签（英文逗号分隔）</label>
+      <input type="text" id="noteTags" placeholder="如：AI, 教程, OpenAI">
+    </div>
+    <div class="form-group">
+      <label>摘要</label>
+      <textarea id="noteSummary" placeholder="一句话概括这条笔记的核心内容" rows="2"></textarea>
+    </div>
+    <div class="form-group">
+      <label>正文内容（备忘笔记展开后显示）</label>
+      <textarea id="noteContent" placeholder="详细内容..." rows="4"></textarea>
+    </div>
+    <div class="form-actions">
+      <button class="btn btn-secondary" onclick="closeModal()">取消</button>
+      <button class="btn btn-primary" onclick="saveNote()">保存</button>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -555,8 +788,21 @@ function formatDateGroup(dateStr) {
   return `${y}年${m}月${day}日 ${weekdays[d.getDay()]}`;
 }
 
+// ===== localStorage 本地笔记 =====
+const LOCAL_NOTES_KEY = 'my-notes-local';
+
+function getLocalNotes() {
+  try {
+    return JSON.parse(localStorage.getItem(LOCAL_NOTES_KEY) || '[]');
+  } catch(e) { return []; }
+}
+
+function saveLocalNotes(notes) {
+  localStorage.setItem(LOCAL_NOTES_KEY, JSON.stringify(notes));
+}
+
 function getAllNotes() {
-  return [...__DATA__.notes];
+  return [...__DATA__.notes, ...getLocalNotes()];
 }
 
 function getFilteredNotes() {
@@ -593,7 +839,7 @@ function getFilteredNotes() {
 
 function getAllTags() {
   const tagCount = {};
-  __DATA__.notes.forEach(n => {
+  getAllNotes().forEach(n => {
     (n.tags || []).forEach(t => {
       tagCount[t] = (tagCount[t] || 0) + 1;
     });
@@ -602,9 +848,10 @@ function getAllTags() {
 }
 
 function getCategoryCounts() {
-  const counts = { '全部': __DATA__.notes.length };
+  const all = getAllNotes();
+  const counts = { '全部': all.length };
   __DATA__.categories.forEach(cat => {
-    counts[cat] = __DATA__.notes.filter(n => n.category === cat).length;
+    counts[cat] = all.filter(n => n.category === cat).length;
   });
   return counts;
 }
@@ -683,6 +930,8 @@ function render() {
         // 备忘型卡片：点击展开/收起
         const contentHtml = n.content ? `<div class="card-content">${escapeHtml(n.content)}</div>` : '';
         const copyId = 'copy-' + (n.id || Math.random().toString(36).slice(2));
+        const isLocal = n._local;
+        const deleteBtn = isLocal ? `<button class="card-delete-btn" onclick="event.stopPropagation();deleteLocalNote('${(n.id || '').replace(/'/g, "\\'")}')">删除</button>` : '';
         return `<div class="card card-memo" onclick="toggleMemo(this)">
           <button class="card-copy-btn" id="${copyId}" onclick="event.stopPropagation();copyNote(this, '${(n.id || '').replace(/'/g, "\\'")}')" title="复制全文">复制</button>
           <span class="card-memo-icon">▼</span>
@@ -691,9 +940,11 @@ function render() {
           ${contentHtml}
           <div class="card-meta">
             ${n.source ? `<span class="card-source">${escapeHtml(n.source)}</span>` : ''}
+            ${isLocal ? '<span class="card-source" style="background:#e8f0ea;color:#4a7c59">本地</span>' : ''}
             <span class="card-date">${formatDate(n.created_at)}</span>
             <div class="card-tags">${tagsHtml}</div>
           </div>
+          ${deleteBtn}
         </div>`;
       } else {
         // 链接型卡片：点击跳转
@@ -794,6 +1045,70 @@ document.addEventListener('keydown', e => {
     render();
   }
 });
+
+// ===== 新建笔记 =====
+function openNewNote() {
+  document.getElementById('modalTitle').textContent = '新建笔记';
+  document.getElementById('noteTitle').value = '';
+  document.getElementById('noteLink').value = '';
+  document.getElementById('noteSource').value = '';
+  document.getElementById('noteTags').value = '';
+  document.getElementById('noteSummary').value = '';
+  document.getElementById('noteContent').value = '';
+
+  // 填充分类下拉
+  const sel = document.getElementById('noteCategory');
+  sel.innerHTML = __DATA__.categories.map(c => `<option value="${c}">${c}</option>`).join('');
+
+  document.getElementById('modalOverlay').classList.add('show');
+  setTimeout(() => document.getElementById('noteTitle').focus(), 200);
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('show');
+}
+
+function saveNote() {
+  const title = document.getElementById('noteTitle').value.trim();
+  if (!title) { document.getElementById('noteTitle').style.borderColor='#c55'; return; }
+
+  const link = document.getElementById('noteLink').value.trim();
+  const category = document.getElementById('noteCategory').value;
+  const source = document.getElementById('noteSource').value.trim();
+  const tagsStr = document.getElementById('noteTags').value.trim();
+  const summary = document.getElementById('noteSummary').value.trim();
+  const content = document.getElementById('noteContent').value.trim();
+
+  const tags = tagsStr ? tagsStr.split(/[,，]/).map(t => t.trim()).filter(Boolean) : [];
+
+  const note = {
+    id: 'local-' + Date.now(),
+    title: title,
+    category: category,
+    tags: tags,
+    summary: summary || '',
+    source: source || '',
+    created_at: new Date().toISOString(),
+    _local: true
+  };
+
+  if (link) note.link = link;
+  if (content) note.content = content;
+
+  const locals = getLocalNotes();
+  locals.push(note);
+  saveLocalNotes(locals);
+
+  closeModal();
+  render();
+}
+
+function deleteLocalNote(noteId) {
+  if (!confirm('确定删除这条笔记？')) return;
+  const locals = getLocalNotes().filter(n => n.id !== noteId);
+  saveLocalNotes(locals);
+  render();
+}
 
 // ===== 初始渲染 =====
 render();
