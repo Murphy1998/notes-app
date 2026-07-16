@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📋 我的笔记 · flomo style</title>
+<style>
+  :root {
+    --bg: #f8f6f2;
+    --card-bg: #ffffff;
+    --text: #2c2c2c;
+    --text-secondary: #8c8c8c;
+    --text-muted: #bfbfbf;
+    --border: #e8e4dc;
+    --tag-bg: #f0ede6;
+    --tag-text: #6b6558;
+    --accent: #4a7c59;
+    --accent-light: #e8f0ea;
+    --shadow: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.06);
+    --shadow-hover: 0 4px 16px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.04);
+    --radius: 12px;
+    --radius-sm: 8px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ===== 顶栏 ===== */
+  .topbar {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(248, 246, 242, 0.85);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 0;
+  }
+
+  .topbar-inner {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .logo {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+    white-space: nowrap;
+    letter-spacing: -0.5px;
+  }
+
+  .search-box {
+    flex: 1;
+    position: relative;
+  }
+
+  .search-box input {
+    width: 100%;
+    padding: 8px 14px 8px 36px;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    font-size: 14px;
+    background: var(--card-bg);
+    color: var(--text);
+    outline: none;
+    transition: all 0.2s;
+  }
+
+  .search-box input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-light);
+  }
+
+  .search-box input::placeholder { color: var(--text-muted); }
+
+  .search-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    font-size: 16px;
+    pointer-events: none;
+  }
+
+  .stats {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    white-space: nowrap;
+  }
+
+  .stats .count {
+    font-weight: 700;
+    color: var(--accent);
+    font-size: 18px;
+  }
+
+  /* ===== 主布局 ===== */
+  .main {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 20px 24px 60px;
+  }
+
+  /* ===== 分类 Tab ===== */
+  .category-tabs {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+  }
+
+  .category-tab {
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    background: var(--card-bg);
+    color: var(--text-secondary);
+    transition: all 0.2s;
+    user-select: none;
+  }
+
+  .category-tab:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .category-tab.active {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+  }
+
+  .category-tab .badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.25);
+    border-radius: 10px;
+    padding: 0 6px;
+    margin-left: 4px;
+    font-size: 11px;
+    min-width: 18px;
+    text-align: center;
+  }
+
+  .category-tab:not(.active) .badge {
+    background: var(--tag-bg);
+  }
+
+  /* ===== 标签云 ===== */
+  .tag-cloud {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+  }
+
+  .tag-chip {
+    padding: 4px 12px;
+    border-radius: 14px;
+    font-size: 12px;
+    cursor: pointer;
+    background: var(--tag-bg);
+    color: var(--tag-text);
+    border: 1px solid transparent;
+    transition: all 0.2s;
+    user-select: none;
+  }
+
+  .tag-chip:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .tag-chip.active {
+    background: var(--accent-light);
+    color: var(--accent);
+    border-color: var(--accent);
+    font-weight: 600;
+  }
+
+  /* ===== 结果提示 ===== */
+  .result-hint {
+    text-align: center;
+    padding: 12px;
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+
+  /* ===== 日期分组 ===== */
+  .date-group {
+    margin-bottom: 28px;
+  }
+
+  .date-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+    padding-left: 4px;
+  }
+
+  /* ===== 卡片流 ===== */
+  .card-flow {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    box-shadow: var(--shadow);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    position: relative;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+
+  .card:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-1px);
+    border-color: #d5cfc4;
+  }
+
+  .card-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: var(--text);
+  }
+
+  .card-summary {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .card-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 12px;
+    flex-wrap: wrap;
+  }
+
+  .card-source {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: #f5f3ef;
+    color: var(--text-secondary);
+  }
+
+  .card-date {
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+
+  .card-tags {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+  }
+
+  .card-tag {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    background: var(--accent-light);
+    color: var(--accent);
+  }
+
+  .card-external-icon {
+    position: absolute;
+    top: 18px;
+    right: 20px;
+    color: var(--text-muted);
+    font-size: 14px;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .card:hover .card-external-icon {
+    opacity: 1;
+  }
+
+  /* ===== 空状态 ===== */
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-muted);
+  }
+
+  .empty-state .icon {
+    font-size: 48px;
+    margin-bottom: 12px;
+  }
+
+  .empty-state p {
+    font-size: 14px;
+    line-height: 1.8;
+  }
+
+  /* ===== 响应式 ===== */
+  @media (max-width: 600px) {
+    .topbar-inner {
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .search-box { order: 3; flex-basis: 100%; }
+    .card { padding: 14px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- 顶栏 -->
+<div class="topbar">
+  <div class="topbar-inner">
+    <span class="logo">📋 我的笔记</span>
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="searchInput" placeholder="搜索笔记标题、摘要、标签..." oninput="render()">
+    </div>
+    <div class="stats">
+      <span class="count" id="totalCount">0</span> 条笔记
+    </div>
+  </div>
+</div>
+
+<!-- 主体 -->
+<div class="main">
+  <!-- 分类Tab -->
+  <div class="category-tabs" id="categoryTabs"></div>
+
+  <!-- 标签云 -->
+  <div class="tag-cloud" id="tagCloud"></div>
+
+  <!-- 结果提示 -->
+  <div class="result-hint" id="resultHint"></div>
+
+  <!-- 卡片区 -->
+  <div id="cardArea"></div>
+</div>
+
+<script>
+// ===== 数据注入 =====
+const __DATA__ = {
+  "meta": {
+    "version": "1.0",
+    "created_at": "2026-07-16",
+    "description": "个人笔记收藏夹 - 按分类整理的文章、链接及关键纪要"
+  },
+  "categories": [
+    "AI与机器学习",
+    "编程技术",
+    "产品与设计",
+    "效率工具",
+    "阅读与思考",
+    "其他"
+  ],
+  "notes": [
+    {
+      "id": "n001",
+      "title": "Codex使用教程",
+      "link": "https://mp.weixin.qq.com/s/SJco8KqYUJT3DjMdrMu_Iw",
+      "category": "AI与机器学习",
+      "tags": [
+        "OpenAI",
+        "Codex",
+        "AI编程",
+        "教程"
+      ],
+      "summary": "OpenAI Codex 的使用教程，涵盖 Codex 的核心能力、API 调用方式、代码生成与补全实践，帮助开发者快速上手 AI 辅助编程。",
+      "source": "微信公众号",
+      "created_at": "2026-07-16T00:00:00+08:00"
+    },
+    {
+      "id": "n002",
+      "title": "从0到1带你速通Codex，我整理的终极保姆教程来了",
+      "link": "https://mp.weixin.qq.com/s/5kgVdLNABViv8uAnD0M6Ag",
+      "category": "AI与机器学习",
+      "tags": [
+        "OpenAI",
+        "Codex",
+        "AI编程",
+        "教程",
+        "入门"
+      ],
+      "summary": "从零到一的 Codex 速通教程，保姆级步骤详解，帮助新手快速掌握 Codex 的核心用法和最佳实践。",
+      "source": "微信公众号",
+      "created_at": "2026-07-16T00:00:00+08:00"
+    }
+  ]
+};
+
+// ===== 状态 =====
+let activeCategory = '全部';
+let activeTag = null;
+
+// ===== 工具函数 =====
+function formatDate(dateStr) {
+  const d = new Date(dateStr);
+  const now = new Date();
+  const diff = now - d;
+  const days = Math.floor(diff / 86400000);
+
+  if (days === 0) return '今天';
+  if (days === 1) return '昨天';
+  if (days < 7) return `${days} 天前`;
+  if (days < 30) return `${Math.floor(days / 7)} 周前`;
+
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${y}-${m}-${day}`;
+}
+
+function formatDateGroup(dateStr) {
+  const d = new Date(dateStr);
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  const weekdays = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
+  return `${y}年${m}月${day}日 ${weekdays[d.getDay()]}`;
+}
+
+function getFilteredNotes() {
+  let notes = [...__DATA__.notes];
+
+  // 分类筛选
+  if (activeCategory !== '全部') {
+    notes = notes.filter(n => n.category === activeCategory);
+  }
+
+  // 标签筛选
+  if (activeTag) {
+    notes = notes.filter(n => n.tags && n.tags.includes(activeTag));
+  }
+
+  // 搜索筛选
+  const query = document.getElementById('searchInput').value.trim().toLowerCase();
+  if (query) {
+    notes = notes.filter(n => {
+      const searchStr = [
+        n.title || '',
+        n.summary || '',
+        (n.tags || []).join(' '),
+        n.source || '',
+        n.category || ''
+      ].join(' ').toLowerCase();
+      return searchStr.includes(query);
+    });
+  }
+
+  return notes.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+}
+
+function getAllTags() {
+  const tagCount = {};
+  __DATA__.notes.forEach(n => {
+    (n.tags || []).forEach(t => {
+      tagCount[t] = (tagCount[t] || 0) + 1;
+    });
+  });
+  return Object.entries(tagCount).sort((a, b) => b[1] - a[1]);
+}
+
+function getCategoryCounts() {
+  const counts = { '全部': __DATA__.notes.length };
+  __DATA__.categories.forEach(cat => {
+    counts[cat] = __DATA__.notes.filter(n => n.category === cat).length;
+  });
+  return counts;
+}
+
+// ===== 渲染 =====
+function render() {
+  const notes = getFilteredNotes();
+  const categoryCounts = getCategoryCounts();
+  const allTags = getAllTags();
+
+  // 总数
+  document.getElementById('totalCount').textContent = notes.length;
+
+  // 分类Tab
+  const catTabs = document.getElementById('categoryTabs');
+  catTabs.innerHTML = ['全部', ...__DATA__.categories].map(cat => {
+    const count = categoryCounts[cat] || 0;
+    const activeCls = activeCategory === cat ? ' active' : '';
+    return `<span class="category-tab${activeCls}" data-cat="${cat}" onclick="selectCategory('${cat.replace(/'/g, "\\'")}')">
+      ${cat}<span class="badge">${count}</span>
+    </span>`;
+  }).join('');
+
+  // 标签云
+  const tagCloud = document.getElementById('tagCloud');
+  if (allTags.length > 0) {
+    tagCloud.innerHTML = allTags.map(([tag, count]) => {
+      const activeCls = activeTag === tag ? ' active' : '';
+      return `<span class="tag-chip${activeCls}" data-tag="${tag}" onclick="selectTag('${tag.replace(/'/g, "\\'")}')">
+        #${tag} <span style="opacity:0.6">${count}</span>
+      </span>`;
+    }).join('');
+    tagCloud.style.display = 'flex';
+  } else {
+    tagCloud.style.display = 'none';
+  }
+
+  // 结果提示
+  const hint = document.getElementById('resultHint');
+  if (notes.length === 0) {
+    hint.textContent = '没有找到匹配的笔记，试试换个关键词或分类';
+  } else {
+    hint.textContent = `共 ${notes.length} 条笔记`;
+  }
+
+  // 卡片区
+  const cardArea = document.getElementById('cardArea');
+
+  if (notes.length === 0) {
+    cardArea.innerHTML = `
+      <div class="empty-state">
+        <div class="icon">📭</div>
+        <p>这里还没有笔记</p>
+        <p style="font-size:13px;margin-top:4px;">把链接发给 CatPaw，我来帮你整理归档</p>
+      </div>`;
+    return;
+  }
+
+  // 按日期分组
+  const groups = {};
+  notes.forEach(n => {
+    const dateKey = n.created_at ? n.created_at.split('T')[0] : 'unknown';
+    if (!groups[dateKey]) groups[dateKey] = [];
+    groups[dateKey].push(n);
+  });
+
+  cardArea.innerHTML = Object.entries(groups).map(([dateKey, groupNotes]) => {
+    const cards = groupNotes.map(n => {
+      const tagsHtml = (n.tags || []).map(t =>
+        `<span class="card-tag" onclick="event.stopPropagation();selectTag('${t.replace(/'/g, "\\'")}')">#${t}</span>`
+      ).join('');
+
+      const linkAttr = n.link ? `href="${n.link}" target="_blank" rel="noopener"` : '';
+      const extIcon = n.link ? '<span class="card-external-icon">↗</span>' : '';
+
+      const tag = n.link ? 'a' : 'div';
+
+      return `<${tag} class="card" ${linkAttr}>
+        ${extIcon}
+        <div class="card-title">${escapeHtml(n.title || '无标题')}</div>
+        <div class="card-summary">${escapeHtml(n.summary || '暂无摘要')}</div>
+        <div class="card-meta">
+          ${n.source ? `<span class="card-source">${escapeHtml(n.source)}</span>` : ''}
+          <span class="card-date">${formatDate(n.created_at)}</span>
+          <div class="card-tags">${tagsHtml}</div>
+        </div>
+      </${tag}>`;
+    }).join('');
+
+    return `<div class="date-group">
+      <div class="date-label">${formatDateGroup(dateKey)}</div>
+      <div class="card-flow">${cards}</div>
+    </div>`;
+  }).join('');
+}
+
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+function selectCategory(cat) {
+  activeCategory = cat;
+  activeTag = null;
+  document.getElementById('searchInput').value = '';
+  render();
+}
+
+function selectTag(tag) {
+  if (activeTag === tag) {
+    activeTag = null;
+  } else {
+    activeTag = tag;
+    activeCategory = '全部';
+  }
+  document.getElementById('searchInput').value = '';
+  render();
+}
+
+// ===== 键盘快捷键 =====
+document.addEventListener('keydown', e => {
+  if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+    e.preventDefault();
+    document.getElementById('searchInput').focus();
+  }
+  if (e.key === 'Escape') {
+    activeCategory = '全部';
+    activeTag = null;
+    document.getElementById('searchInput').value = '';
+    render();
+  }
+});
+
+// ===== 初始渲染 =====
+render();
+</script>
+</body>
+</html>
