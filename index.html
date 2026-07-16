@@ -598,6 +598,32 @@
     border-color: #c88;
   }
 
+  /* ===== 同步状态提示 ===== */
+  .sync-status {
+    display: none;
+    position: fixed;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 10px 24px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+    background: #333;
+    color: #fff;
+    z-index: 10000;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    animation: fadeIn 0.2s ease;
+  }
+
+  .sync-status.success { background: var(--accent); }
+  .sync-status.warn { background: #c57a20; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+    to { opacity: 1; transform: translateX(-50%) translateY(0); }
+  }
+
   /* ===== 响应式 ===== */
   @media (max-width: 600px) {
     .topbar-inner {
@@ -875,6 +901,15 @@ const __DATA__ = {
   ]
 };
 
+// ===== GitHub API 配置 =====
+const GH_REPO = 'Murphy1998/notes-app';
+// token 存储在 localStorage，首次使用时引导设置
+function getGHToken() { return localStorage.getItem('gh-notes-token') || ''; }
+function setGHToken(t) { localStorage.setItem('gh-notes-token', t); }
+const GH_DB_PATH = 'database.json'; // 仓库中 database.json 的路径
+let __REMOTE_NOTES__ = null; // 远程拉取的最新笔记
+let __SYNCING__ = false; // 是否正在同步
+
 // ===== 状态 =====
 let activeCategory = '全部';
 let activeTag = null;
@@ -906,7 +941,7 @@ function formatDateGroup(dateStr) {
   return `${y}年${m}月${day}日 ${weekdays[d.getDay()]}`;
 }
 
-// ===== localStorage 本地笔记 =====
+// ===== localStorage 本地笔记（仅作为同步失败时的临时缓存） =====
 const LOCAL_NOTES_KEY = 'my-notes-local';
 
 function getLocalNotes() {
@@ -920,7 +955,100 @@ function saveLocalNotes(notes) {
 }
 
 function getAllNotes() {
-  return [...__DATA__.notes, ...getLocalNotes()];
+  // 优先使用远程数据，兜底用构建时注入的静态数据
+  const baseNotes = __REMOTE_NOTES__ || __DATA__.notes;
+  return [...baseNotes, ...getLocalNotes()];
+}
+
+// ===== GitHub API 同步 =====
+async function ghApiFetch(path, options = {}) {
+  const token = getGHToken();
+  if (!token) {
+    showTokenSetup();
+    throw new Error('未设置 GitHub Token');
+  }
+  const resp = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${path}`, {
+    ...options,
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Accept': 'application/vnd.github.v3+json',
+      'Content-Type': 'application/json',
+      ...(options.headers || {})
+    }
+  });
+  return resp;
+}
+
+// Token 设置弹窗
+function showTokenSetup() {
+  const token = prompt(
+    '首次使用云同步，请输入 GitHub Token：\n\n' +
+    '获取方法：github.com/settings/tokens → Generate new token (classic) → 勾选 repo → 生成并复制'
+  );
+  if (token && token.trim()) {
+    setGHToken(token.trim());
+    showSyncStatus('Token 已保存', 'success');
+    initRemoteData();
+  }
+}
+
+// 从 GitHub 拉取最新 database.json
+async function fetchRemoteNotes() {
+  try {
+    const resp = await ghApiFetch(GH_DB_PATH);
+    if (!resp.ok) return null;
+    const fileInfo = await resp.json();
+    const content = JSON.parse(atob(fileInfo.content));
+    return { data: content, sha: fileInfo.sha };
+  } catch(e) {
+    console.log('拉取远程数据失败:', e);
+    return null;
+  }
+}
+
+// 将笔记写入 GitHub 仓库的 database.json
+async function pushToGitHub(newDbData, sha, message) {
+  const content = btoa(unescape(encodeURIComponent(JSON.stringify(newDbData, null, 2))));
+  const resp = await ghApiFetch(GH_DB_PATH, {
+    method: 'PUT',
+    body: JSON.stringify({ message, content, sha })
+  });
+  return resp;
+}
+
+// 页面加载时拉取最新数据
+async function initRemoteData() {
+  if (!getGHToken()) return; // 未设置 token 时跳过，使用静态数据
+  const result = await fetchRemoteNotes();
+  if (result) {
+    __REMOTE_NOTES__ = result.data.notes;
+    // 检查是否有待同步的本地笔记
+    const locals = getLocalNotes();
+    if (locals.length > 0) {
+      await syncLocalToRemote(result.data, result.sha, locals);
+    }
+    render();
+  }
+}
+
+// 将本地暂存的笔记同步到 GitHub
+async function syncLocalToRemote(dbData, sha, locals) {
+  try {
+    const newDb = { ...dbData };
+    locals.forEach(n => {
+      const cleanNote = { ...n };
+      delete cleanNote._local;
+      newDb.notes.push(cleanNote);
+    });
+    const resp = await pushToGitHub(newDb, sha, `同步 ${locals.length} 条本地暂存笔记`);
+    if (resp.ok) {
+      saveLocalNotes([]); // 清空本地暂存
+      __REMOTE_NOTES__ = newDb.notes;
+      render();
+    }
+  } catch(e) {
+    console.log('同步本地笔记失败:', e);
+  }
 }
 
 function getFilteredNotes() {
@@ -1049,7 +1177,7 @@ function render() {
         const contentHtml = n.content ? `<div class="card-content">${escapeHtml(n.content).replace(/\n/g, '<br>')}</div>` : '';
         const copyId = 'copy-' + (n.id || Math.random().toString(36).slice(2));
         const isLocal = n._local;
-        const deleteBtn = isLocal ? `<button class="card-delete-btn" onclick="event.stopPropagation();deleteLocalNote('${(n.id || '').replace(/'/g, "\\'")}')">删除</button>` : '';
+        const deleteBtn = `<button class="card-delete-btn" onclick="event.stopPropagation();deleteNote('${(n.id || '').replace(/'/g, "\\'")}')">删除</button>`;
         return `<div class="card card-memo" onclick="toggleMemo(this)">
           <button class="card-copy-btn" id="${copyId}" onclick="event.stopPropagation();copyNote(this, '${(n.id || '').replace(/'/g, "\\'")}')" title="复制全文">复制</button>
           <span class="card-memo-icon">▼</span>
@@ -1186,7 +1314,7 @@ function closeModal() {
   document.getElementById('modalOverlay').classList.remove('show');
 }
 
-function saveNote() {
+async function saveNote() {
   const title = document.getElementById('noteTitle').value.trim();
   if (!title) { document.getElementById('noteTitle').style.borderColor='#c55'; return; }
 
@@ -1199,33 +1327,95 @@ function saveNote() {
 
   const tags = tagsStr ? tagsStr.split(/[,，]/).map(t => t.trim()).filter(Boolean) : [];
 
+  const noteId = 'n' + Date.now().toString(36);
   const note = {
-    id: 'local-' + Date.now(),
+    id: noteId,
     title: title,
     category: category,
     tags: tags,
     summary: summary || '',
     source: source || '',
-    created_at: new Date().toISOString(),
-    _local: true
+    created_at: new Date().toISOString()
   };
 
   if (link) note.link = link;
   if (content) note.content = content;
 
-  const locals = getLocalNotes();
-  locals.push(note);
-  saveLocalNotes(locals);
-
+  // 先关闭弹窗，显示同步状态
   closeModal();
+  showSyncStatus('正在保存...');
+
+  try {
+    // 从 GitHub 拉取最新数据
+    const result = await fetchRemoteNotes();
+    if (!result) throw new Error('无法连接 GitHub');
+
+    // 追加新笔记
+    const newDb = { ...result.data };
+    newDb.notes.push(note);
+
+    // 推送到 GitHub
+    const resp = await pushToGitHub(newDb, result.sha, `新增笔记: ${title}`);
+    if (!resp.ok) throw new Error('推送失败');
+
+    __REMOTE_NOTES__ = newDb.notes;
+    showSyncStatus('保存成功！页面将在1-2分钟后自动更新', 'success');
+  } catch(e) {
+    console.log('保存到 GitHub 失败，暂存本地:', e);
+    note._local = true;
+    const locals = getLocalNotes();
+    locals.push(note);
+    saveLocalNotes(locals);
+    showSyncStatus('网络异常，已暂存本地，联网后自动同步', 'warn');
+  }
   render();
 }
 
-function deleteLocalNote(noteId) {
+async function deleteNote(noteId) {
   if (!confirm('确定删除这条笔记？')) return;
-  const locals = getLocalNotes().filter(n => n.id !== noteId);
-  saveLocalNotes(locals);
+
+  // 如果是本地暂存的笔记，直接从 localStorage 删除
+  const locals = getLocalNotes();
+  if (locals.some(n => n.id === noteId)) {
+    saveLocalNotes(locals.filter(n => n.id !== noteId));
+    render();
+    return;
+  }
+
+  // 远程笔记，从 GitHub 删除
+  showSyncStatus('正在删除...');
+  try {
+    const result = await fetchRemoteNotes();
+    if (!result) throw new Error('无法连接 GitHub');
+
+    const newDb = { ...result.data };
+    newDb.notes = newDb.notes.filter(n => n.id !== noteId);
+
+    const resp = await pushToGitHub(newDb, result.sha, `删除笔记: ${noteId}`);
+    if (!resp.ok) throw new Error('删除失败');
+
+    __REMOTE_NOTES__ = newDb.notes;
+    showSyncStatus('删除成功', 'success');
+  } catch(e) {
+    showSyncStatus('删除失败，请稍后重试', 'warn');
+  }
   render();
+}
+
+// 同步状态提示
+function showSyncStatus(msg, type) {
+  let el = document.getElementById('syncStatus');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'syncStatus';
+    document.body.appendChild(el);
+  }
+  el.textContent = msg;
+  el.className = 'sync-status';
+  if (type) el.classList.add(type);
+  el.style.display = 'block';
+  clearTimeout(el._timer);
+  el._timer = setTimeout(() => { el.style.display = 'none'; }, 3000);
 }
 
 // ===== 密码锁 =====
@@ -1266,6 +1456,9 @@ if (checkAuth()) {
 
 // ===== 初始渲染 =====
 render();
+
+// ===== 拉取远程最新数据 =====
+initRemoteData();
 
 // ===== PWA Service Worker =====
 if ('serviceWorker' in navigator) {
