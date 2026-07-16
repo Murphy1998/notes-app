@@ -1023,13 +1023,20 @@ function saveToken() {
   initRemoteData();
 }
 
+// Base64 解码（支持 UTF-8 中文）
+function b64DecodeUnicode(str) {
+  const binStr = atob(str);
+  const bytes = Uint8Array.from(binStr, c => c.charCodeAt(0));
+  return new TextDecoder().decode(bytes);
+}
+
 // 从 GitHub 拉取最新 database.json
 async function fetchRemoteNotes() {
   try {
     const resp = await ghApiFetch(GH_DB_PATH);
     if (!resp.ok) return null;
     const fileInfo = await resp.json();
-    const content = JSON.parse(atob(fileInfo.content));
+    const content = JSON.parse(b64DecodeUnicode(fileInfo.content));
     return { data: content, sha: fileInfo.sha };
   } catch(e) {
     console.log('拉取远程数据失败:', e);
