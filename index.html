@@ -817,6 +817,31 @@
   </div>
 </div>
 
+<!-- Token 设置弹窗 -->
+<div class="modal-overlay" id="tokenOverlay" onclick="if(event.target===this)closeTokenSetup()">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>设置云同步</h3>
+      <button class="modal-close" onclick="closeTokenSetup()">&times;</button>
+    </div>
+    <p style="font-size:13px;color:var(--text-secondary);margin-bottom:14px;line-height:1.7;">
+      输入 GitHub Token 后，在任何设备新建的笔记都会永久保存并多端同步。
+    </p>
+    <div class="form-group">
+      <label>GitHub Token</label>
+      <input type="password" id="tokenInput" placeholder="ghp_xxxxxxxxxxxx"
+        onkeydown="if(event.key==='Enter')saveToken()">
+    </div>
+    <p style="font-size:11px;color:var(--text-muted);margin-bottom:14px;line-height:1.6;">
+      获取方法：打开 github.com/settings/tokens → Generate new token (classic) → 勾选 repo 权限 → 生成并复制
+    </p>
+    <div class="form-actions">
+      <button class="btn btn-secondary" onclick="closeTokenSetup()">跳过</button>
+      <button class="btn btn-primary" onclick="saveToken()">保存</button>
+    </div>
+  </div>
+</div>
+
 <script>
 // ===== 数据注入 =====
 const __DATA__ = {
@@ -981,15 +1006,21 @@ async function ghApiFetch(path, options = {}) {
 
 // Token 设置弹窗
 function showTokenSetup() {
-  const token = prompt(
-    '首次使用云同步，请输入 GitHub Token：\n\n' +
-    '获取方法：github.com/settings/tokens → Generate new token (classic) → 勾选 repo → 生成并复制'
-  );
-  if (token && token.trim()) {
-    setGHToken(token.trim());
-    showSyncStatus('Token 已保存', 'success');
-    initRemoteData();
-  }
+  document.getElementById('tokenOverlay').classList.add('show');
+  setTimeout(() => document.getElementById('tokenInput').focus(), 200);
+}
+
+function closeTokenSetup() {
+  document.getElementById('tokenOverlay').classList.remove('show');
+}
+
+function saveToken() {
+  const val = document.getElementById('tokenInput').value.trim();
+  if (!val) { document.getElementById('tokenInput').style.borderColor='#c55'; return; }
+  setGHToken(val);
+  closeTokenSetup();
+  showSyncStatus('Token 已保存，正在同步...', 'success');
+  initRemoteData();
 }
 
 // 从 GitHub 拉取最新 database.json
@@ -1018,7 +1049,11 @@ async function pushToGitHub(newDbData, sha, message) {
 
 // 页面加载时拉取最新数据
 async function initRemoteData() {
-  if (!getGHToken()) return; // 未设置 token 时跳过，使用静态数据
+  if (!getGHToken()) {
+    // 未设置 token，延迟弹出引导
+    setTimeout(() => { if (!getGHToken()) showTokenSetup(); }, 800);
+    return;
+  }
   const result = await fetchRemoteNotes();
   if (result) {
     __REMOTE_NOTES__ = result.data.notes;
