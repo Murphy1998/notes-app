@@ -544,6 +544,37 @@
 
   .btn-secondary:hover { background: var(--tag-bg); }
 
+  /* ===== 编辑按钮 ===== */
+  .card-edit-btn {
+    display: none;
+    position: absolute;
+    bottom: 16px;
+    right: 64px;
+    padding: 3px 8px;
+    font-size: 11px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: #fff;
+    color: var(--accent);
+    cursor: pointer;
+    transition: all 0.2s;
+    z-index: 2;
+  }
+
+  .card.card-memo.expanded .card-edit-btn { display: inline-block; }
+
+  .card-edit-btn:hover {
+    background: var(--accent-light);
+    border-color: var(--accent);
+  }
+
+  .card-link-edit { display: none !important; }
+  .card.card-link:hover .card-link-edit { display: inline-block !important; }
+
+  @media (max-width: 600px) {
+    .card-link-edit { display: inline-block !important; opacity: 0.6; }
+  }
+
   /* ===== 删除按钮 ===== */
   .card-delete-btn {
     display: none;
@@ -779,6 +810,7 @@ const CATEGORIES = ["AI与机器学习", "编程技术", "产品与设计", "效
 let __NOTES__ = []; // 所有笔记（从 Supabase 拉取）
 let activeCategory = '全部';
 let activeTag = null;
+let __EDITING_ID__ = null; // 正在编辑的笔记 ID，null 表示新建
 
 // ===== Supabase API =====
 async function supaFetch(path, options = {}) {
@@ -824,6 +856,17 @@ async function removeNote(noteId) {
     method: 'DELETE'
   });
   if (!resp.ok) throw new Error('删除失败');
+}
+
+// 更新 Supabase 中的笔记
+async function updateNote(noteId, data) {
+  const resp = await supaFetch(`notes?id=eq.${noteId}`, {
+    method: 'PATCH',
+    headers: { 'Prefer': 'return=representation' },
+    body: JSON.stringify(data)
+  });
+  if (!resp.ok) throw new Error('更新失败');
+  return (await resp.json())[0];
 }
 
 // ===== 工具函数 =====
@@ -990,6 +1033,7 @@ function render() {
       if (isMemo) {
         const contentHtml = n.content ? `<div class="card-content">${renderContent(n.content)}</div>` : '';
         const copyId = 'copy-' + (n.id || Math.random().toString(36).slice(2));
+        const editBtn = `<button class="card-edit-btn" onclick="event.stopPropagation();openEditNote('${(n.id || '').replace(/'/g, "\\'")}')">编辑</button>`;
         const deleteBtn = `<button class="card-delete-btn" onclick="event.stopPropagation();deleteNote('${(n.id || '').replace(/'/g, "\\'")}')">删除</button>`;
         return `<div class="card card-memo" onclick="toggleMemo(this)">
           <button class="card-copy-btn" id="${copyId}" onclick="event.stopPropagation();copyNote(this, '${(n.id || '').replace(/'/g, "\\'")}')" title="复制全文">复制</button>
@@ -1002,11 +1046,13 @@ function render() {
             <span class="card-date">${formatDate(n.created_at)}</span>
             <div class="card-tags">${tagsHtml}</div>
           </div>
+          ${editBtn}
           ${deleteBtn}
         </div>`;
       } else {
-        return `<a class="card" href="${n.link}" target="_blank" rel="noopener">
+        return `<div class="card card-link" onclick="window.open('${n.link}','_blank')">
           <span class="card-external-icon">↗</span>
+          <button class="card-edit-btn card-link-edit" onclick="event.stopPropagation();openEditNote('${(n.id || '').replace(/'/g, "\\'")}')">编辑</button>
           <div class="card-title">${escapeHtml(n.title || '无标题')}</div>
           <div class="card-summary">${escapeHtml(n.summary || '暂无摘要')}</div>
           <div class="card-meta">
@@ -1014,7 +1060,7 @@ function render() {
             <span class="card-date">${formatDate(n.created_at)}</span>
             <div class="card-tags">${tagsHtml}</div>
           </div>
-        </a>`;
+        </div>`;
       }
     }).join('');
 
@@ -1090,6 +1136,7 @@ document.addEventListener('keydown', e => {
 
 // ===== 新建笔记 =====
 function openNewNote() {
+  __EDITING_ID__ = null;
   document.getElementById('modalTitle').textContent = '新建笔记';
   document.getElementById('noteTitle').value = '';
   document.getElementById('noteLink').value = '';
@@ -1100,6 +1147,27 @@ function openNewNote() {
 
   const sel = document.getElementById('noteCategory');
   sel.innerHTML = CATEGORIES.map(c => `<option value="${c}">${c}</option>`).join('');
+
+  document.getElementById('modalOverlay').classList.add('show');
+  setTimeout(() => document.getElementById('noteTitle').focus(), 200);
+}
+
+function openEditNote(noteId) {
+  const note = __NOTES__.find(n => n.id === noteId);
+  if (!note) return;
+
+  __EDITING_ID__ = noteId;
+  document.getElementById('modalTitle').textContent = '编辑笔记';
+
+  const sel = document.getElementById('noteCategory');
+  sel.innerHTML = CATEGORIES.map(c => `<option value="${c}"${c === note.category ? ' selected' : ''}>${c}</option>`).join('');
+
+  document.getElementById('noteTitle').value = note.title || '';
+  document.getElementById('noteLink').value = note.link || '';
+  document.getElementById('noteSource').value = note.source || '';
+  document.getElementById('noteTags').value = (note.tags || []).join(', ');
+  document.getElementById('noteSummary').value = note.summary || '';
+  document.getElementById('noteContent').value = note.content || '';
 
   document.getElementById('modalOverlay').classList.add('show');
   setTimeout(() => document.getElementById('noteTitle').focus(), 200);
@@ -1122,27 +1190,36 @@ async function saveNote() {
 
   const tags = tagsStr ? tagsStr.split(/[,，]/).map(t => t.trim()).filter(Boolean) : [];
 
-  const note = {
-    id: 'n' + Date.now().toString(36),
-    title,
-    category,
-    tags,
-    summary: summary || '',
-    source: source || '',
-    created_at: new Date().toISOString()
-  };
-
-  if (link) note.link = link;
-  if (content) note.content = content;
-
   closeModal();
   showSyncStatus('正在保存...');
 
   try {
-    const saved = await insertNote(note);
-    __NOTES__.unshift(saved);
-    render();
-    showSyncStatus('保存成功！', 'success');
+    if (__EDITING_ID__) {
+      // 编辑模式
+      const data = { title, category, tags, summary: summary || '', source: source || '', link: link || null, content: content || '' };
+      const updated = await updateNote(__EDITING_ID__, data);
+      const idx = __NOTES__.findIndex(n => n.id === __EDITING_ID__);
+      if (idx >= 0) __NOTES__[idx] = updated;
+      __EDITING_ID__ = null;
+      render();
+      showSyncStatus('修改已保存！', 'success');
+    } else {
+      // 新建模式
+      const note = {
+        id: 'n' + Date.now().toString(36),
+        title, category, tags,
+        summary: summary || '',
+        source: source || '',
+        created_at: new Date().toISOString()
+      };
+      if (link) note.link = link;
+      if (content) note.content = content;
+
+      const saved = await insertNote(note);
+      __NOTES__.unshift(saved);
+      render();
+      showSyncStatus('保存成功！', 'success');
+    }
   } catch(e) {
     console.log('保存失败:', e);
     showSyncStatus('保存失败，请检查网络后重试', 'warn');
