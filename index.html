@@ -859,6 +859,15 @@ function escapeHtml(str) {
   return div.innerHTML;
 }
 
+// 简易 Markdown 渲染：换行 + **加粗** + ## 标题
+function renderContent(str) {
+  if (!str) return '';
+  return escapeHtml(str)
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/^## (.+)$/gm, '<div style="font-weight:700;font-size:15px;margin:12px 0 6px;color:var(--text)">$1</div>')
+    .replace(/\n/g, '<br>');
+}
+
 function getAllNotes() {
   return __NOTES__;
 }
@@ -979,7 +988,7 @@ function render() {
       const isMemo = !n.link;
 
       if (isMemo) {
-        const contentHtml = n.content ? `<div class="card-content">${escapeHtml(n.content).replace(/\n/g, '<br>')}</div>` : '';
+        const contentHtml = n.content ? `<div class="card-content">${renderContent(n.content)}</div>` : '';
         const copyId = 'copy-' + (n.id || Math.random().toString(36).slice(2));
         const deleteBtn = `<button class="card-delete-btn" onclick="event.stopPropagation();deleteNote('${(n.id || '').replace(/'/g, "\\'")}')">删除</button>`;
         return `<div class="card card-memo" onclick="toggleMemo(this)">
