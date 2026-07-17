@@ -214,9 +214,7 @@
   }
 
   /* ===== 日期分组 ===== */
-  .date-group {
-    margin-bottom: 28px;
-  }
+  .date-group { margin-bottom: 28px; }
 
   .date-label {
     font-size: 12px;
@@ -317,9 +315,7 @@
     transition: opacity 0.2s;
   }
 
-  .card:hover .card-external-icon {
-    opacity: 1;
-  }
+  .card:hover .card-external-icon { opacity: 1; }
 
   /* ===== 备忘型卡片 ===== */
   .card.card-memo {
@@ -336,9 +332,7 @@
     transition: transform 0.3s;
   }
 
-  .card.card-memo.expanded .card-memo-icon {
-    transform: rotate(180deg);
-  }
+  .card.card-memo.expanded .card-memo-icon { transform: rotate(180deg); }
 
   .card-content {
     font-size: 14px;
@@ -363,9 +357,7 @@
     padding-top: 12px;
   }
 
-  .card.card-memo.expanded .card-summary {
-    -webkit-line-clamp: unset;
-  }
+  .card.card-memo.expanded .card-summary { -webkit-line-clamp: unset; }
 
   .card-copy-btn {
     display: none;
@@ -383,9 +375,7 @@
     z-index: 2;
   }
 
-  .card.card-memo.expanded .card-copy-btn {
-    display: inline-block;
-  }
+  .card.card-memo.expanded .card-copy-btn { display: inline-block; }
 
   .card-copy-btn:hover {
     background: var(--accent-light);
@@ -406,15 +396,8 @@
     color: var(--text-muted);
   }
 
-  .empty-state .icon {
-    font-size: 48px;
-    margin-bottom: 12px;
-  }
-
-  .empty-state p {
-    font-size: 14px;
-    line-height: 1.8;
-  }
+  .empty-state .icon { font-size: 48px; margin-bottom: 12px; }
+  .empty-state p { font-size: 14px; line-height: 1.8; }
 
   /* ===== 浮动新建按钮 ===== */
   .fab {
@@ -496,9 +479,7 @@
 
   .modal-close:hover { background: var(--tag-bg); }
 
-  .form-group {
-    margin-bottom: 14px;
-  }
+  .form-group { margin-bottom: 14px; }
 
   .form-group label {
     display: block;
@@ -530,23 +511,12 @@
     box-shadow: 0 0 0 3px var(--accent-light);
   }
 
-  .form-group textarea {
-    min-height: 80px;
-    resize: vertical;
-  }
+  .form-group textarea { min-height: 80px; resize: vertical; }
 
-  .form-row {
-    display: flex;
-    gap: 10px;
-  }
-
+  .form-row { display: flex; gap: 10px; }
   .form-row .form-group { flex: 1; }
 
-  .form-actions {
-    display: flex;
-    gap: 10px;
-    margin-top: 18px;
-  }
+  .form-actions { display: flex; gap: 10px; margin-top: 18px; }
 
   .btn {
     flex: 1;
@@ -574,7 +544,7 @@
 
   .btn-secondary:hover { background: var(--tag-bg); }
 
-  /* ===== 本地笔记删除按钮 ===== */
+  /* ===== 删除按钮 ===== */
   .card-delete-btn {
     display: none;
     position: absolute;
@@ -591,16 +561,14 @@
     z-index: 2;
   }
 
-  .card.card-memo.expanded .card-delete-btn {
-    display: inline-block;
-  }
+  .card.card-memo.expanded .card-delete-btn { display: inline-block; }
 
   .card-delete-btn:hover {
     background: #fde8e8;
     border-color: #c88;
   }
 
-  /* ===== 同步状态提示 ===== */
+  /* ===== 状态提示 ===== */
   .sync-status {
     display: none;
     position: fixed;
@@ -628,15 +596,13 @@
 
   /* ===== 响应式 ===== */
   @media (max-width: 600px) {
-    .topbar-inner {
-      flex-wrap: wrap;
-      gap: 10px;
-    }
+    .topbar-inner { flex-wrap: wrap; gap: 10px; }
     .search-box { order: 3; flex-basis: 100%; }
     .card { padding: 14px 16px; }
     .modal { padding: 16px 16px calc(16px + env(safe-area-inset-bottom)); }
     .fab { bottom: 20px; right: 20px; }
   }
+
   /* ===== 密码锁屏 ===== */
   .lock-screen {
     position: fixed;
@@ -651,15 +617,9 @@
 
   .lock-screen.hidden { display: none; }
 
-  .lock-box {
-    text-align: center;
-    padding: 40px;
-  }
+  .lock-box { text-align: center; padding: 40px; }
 
-  .lock-icon {
-    font-size: 48px;
-    margin-bottom: 16px;
-  }
+  .lock-icon { font-size: 48px; margin-bottom: 16px; }
 
   .lock-title {
     font-size: 20px;
@@ -705,12 +665,7 @@
     40%, 80% { transform: translateX(8px); }
   }
 
-  .lock-hint {
-    font-size: 12px;
-    color: #c55;
-    margin-top: 10px;
-    height: 18px;
-  }
+  .lock-hint { font-size: 12px; color: #c55; margin-top: 10px; height: 18px; }
 
   .lock-btn {
     margin-top: 16px;
@@ -759,16 +714,9 @@
 
 <!-- 主体 -->
 <div class="main">
-  <!-- 分类Tab -->
   <div class="category-tabs" id="categoryTabs"></div>
-
-  <!-- 标签云 -->
   <div class="tag-cloud" id="tagCloud"></div>
-
-  <!-- 结果提示 -->
   <div class="result-hint" id="resultHint"></div>
-
-  <!-- 卡片区 -->
   <div id="cardArea"></div>
 </div>
 
@@ -819,127 +767,64 @@
   </div>
 </div>
 
-<!-- Token 设置弹窗 -->
-<div class="modal-overlay" id="tokenOverlay" onclick="if(event.target===this)closeTokenSetup()">
-  <div class="modal">
-    <div class="modal-header">
-      <h3>设置云同步</h3>
-      <button class="modal-close" onclick="closeTokenSetup()">&times;</button>
-    </div>
-    <p style="font-size:13px;color:var(--text-secondary);margin-bottom:14px;line-height:1.7;">
-      输入 GitHub Token 后，在任何设备新建的笔记都会永久保存并多端同步。
-    </p>
-    <div class="form-group">
-      <label>GitHub Token</label>
-      <input type="password" id="tokenInput" placeholder="ghp_xxxxxxxxxxxx"
-        onkeydown="if(event.key==='Enter')saveToken()">
-    </div>
-    <p style="font-size:11px;color:var(--text-muted);margin-bottom:14px;line-height:1.6;">
-      获取方法：打开 github.com/settings/tokens → Generate new token (classic) → 勾选 repo 权限 → 生成并复制
-    </p>
-    <div class="form-actions">
-      <button class="btn btn-secondary" onclick="closeTokenSetup()">跳过</button>
-      <button class="btn btn-primary" onclick="saveToken()">保存</button>
-    </div>
-  </div>
-</div>
-
 <script>
-// ===== 数据注入 =====
-const __DATA__ = {
-  "meta": {
-    "version": "1.0",
-    "created_at": "2026-07-16",
-    "description": "个人笔记收藏夹 - 按分类整理的文章、链接及关键纪要"
-  },
-  "categories": [
-    "AI与机器学习",
-    "编程技术",
-    "产品与设计",
-    "效率工具",
-    "阅读与思考",
-    "其他"
-  ],
-  "notes": [
-    {
-      "id": "n001",
-      "title": "Codex使用教程",
-      "link": "https://mp.weixin.qq.com/s/SJco8KqYUJT3DjMdrMu_Iw",
-      "category": "AI与机器学习",
-      "tags": [
-        "OpenAI",
-        "Codex",
-        "AI编程",
-        "教程"
-      ],
-      "summary": "OpenAI Codex 的使用教程，涵盖 Codex 的核心能力、API 调用方式、代码生成与补全实践，帮助开发者快速上手 AI 辅助编程。",
-      "source": "微信公众号",
-      "created_at": "2026-07-16T00:00:00+08:00"
-    },
-    {
-      "id": "n002",
-      "title": "从0到1带你速通Codex，我整理的终极保姆教程来了",
-      "link": "https://mp.weixin.qq.com/s/5kgVdLNABViv8uAnD0M6Ag",
-      "category": "AI与机器学习",
-      "tags": [
-        "OpenAI",
-        "Codex",
-        "AI编程",
-        "教程",
-        "入门"
-      ],
-      "summary": "从零到一的 Codex 速通教程，保姆级步骤详解，帮助新手快速掌握 Codex 的核心用法和最佳实践。",
-      "source": "微信公众号",
-      "created_at": "2026-07-16T00:00:00+08:00"
-    },
-    {
-      "id": "n003",
-      "title": "从零开始：用 AI 开发笔记应用并部署到 iPhone",
-      "category": "效率工具",
-      "tags": [
-        "PWA",
-        "iOS",
-        "教程",
-        "笔记工具",
-        "GitHub Pages",
-        "CatPaw"
-      ],
-      "summary": "完整记录了如何用 AI 工具从 0 到 1 开发一个 flomo 风格的笔记网页应用，部署到 GitHub Pages，最后变成 iPhone 上的独立 App。零代码基础也能照做。",
-      "content": "一、用 AI 开发笔记网页应用\n\n工具：CatPaw（美团内部 AI 助手）\nPrompt 示例：「帮我开发一个笔记整理小工具，我每次会将笔记发给你，你分门别类放进去，放进链接及关键纪要总结」\n\nAI 会自动完成以下工作：\n· 设计数据结构（database.json）：每条笔记包含标题、链接、分类、标签、摘要、来源、时间\n· 设计分类体系：AI与机器学习 / 编程技术 / 产品与设计 / 效率工具 / 阅读与思考 / 其他\n· 生成可视化界面（viewer.html）：flomo 风格的卡片流布局，支持搜索、分类筛选、标签导航\n· 区分两种笔记类型：链接型（点击跳转原文）和备忘型（点击展开/收起详情）\n\n后续添加笔记只需发消息，例如：\n「新增笔记：React 19 新特性 https://xxx.com」\nAI 自动识别内容 → 归类 → 生成摘要 → 打标签 → 更新页面\n\n二、部署到线上（GitHub Pages）\n\n1. 注册 GitHub 账号：github.com\n2. 创建新仓库：点右上角 + → New repository → 仓库名填 notes-app → 选 Public → 不勾选 README → Create\n3. 推送代码：让 AI 帮你执行 git init / git add / git commit / git push（需要生成 Personal Access Token）\n4. 启用 Pages：进入仓库 → Settings → Pages → Source 选 Deploy from a branch → Branch 选 main，路径选 / (root) → Save\n5. 等待 1-2 分钟，访问 https://你的用户名.github.io/notes-app/ 即可看到页面\n\n生成 Token 的方法：\n· 打开 github.com/settings/tokens → Generate new token (classic)\n· 勾选 repo 权限 → Generate token → 复制 token 给 AI 用于推送\n\n三、将网页变成 iPhone 独立 App（PWA）\n\nAI 会自动改造页面为 PWA（渐进式 Web 应用），添加以下文件：\n· manifest.json：App 名称、图标、主题色等配置\n· sw.js：离线缓存，无网络也能查看已加载的笔记\n· 多尺寸图标：自动生成 72px ~ 512px 的 App 图标\n\n在 iPhone 上安装：\n1. 用 Safari 打开你的 GitHub Pages 链接\n2. 点底部中间的「分享」按钮（方框 + 向上箭头图标）\n3. 往下滑找到「添加到主屏幕」\n4. 点「添加」\n\n完成后主屏幕出现绿色笔记本图标，点开就是全屏独立 App，没有浏览器地址栏，体验接近原生应用。\n\n注意事项：\n· 必须用 Safari，Chrome 不支持 iOS 上的 PWA 安装\n· 页面必须通过 HTTPS 访问（GitHub Pages 默认支持）\n· 离线模式下只能查看已缓存的笔记，新内容需联网刷新",
-      "source": "自整理",
-      "created_at": "2026-07-16T00:00:00+08:00"
-    },
-    {
-      "id": "n004",
-      "title": "AGENT规矩-卡帕西：减少LLM编码错误的行为准则",
-      "category": "AI与机器学习",
-      "tags": [
-        "AI编程",
-        "LLM",
-        "编程规范",
-        "Karpathy",
-        "最佳实践"
-      ],
-      "summary": "Andrej Karpathy 整理的减少常见 LLM 编码错误的行为准则，涵盖基础规则、调试规则和架构规则三大类，帮助开发者在 AI 辅助编程中避免常见陷阱。",
-      "content": "减少常见LLM编码错误的行为准则\n可根据需要与项目特定指令合并。\n\n权衡：这些准则倾向于谨慎而非速度。它们的设计目标是减少你引入的微妙 bug、回归问题和\"快速但错误\"的修复。\n\n## 基础规则\n\n- 在做修改之前先阅读整个文件或相关上下文。不要对格式、结构或逻辑做假设。每个文件都有自己的约定。\n- 修改现有文件时，匹配其现有风格——即使它与你通常的偏好不同。\n- 永远不要假设变量、函数或导入的存在。检查实际的代码库。\n- 绝不发明函数签名、参数或行为。验证后再使用。\n- 修复时只修改出问题的地方。不要重新格式化周围的代码，不要重命名内容，也不要「顺手改进」。\n- 必须给出合理解释后才建议安装新的依赖。偏向使用已有的依赖。\n- 保持版本与项目已经使用的一致，除非有明确的升级理由（和明确的迁移路径）。\n- 每次修改后检查是否有仍然引用旧路径、旧名称或已删除元素的代码。清理所有引用。\n- 不要留下 TODO 或占位符。要么完整实现，要么不做。\n- 删除所有不再使用的调试输出（console.log、print 等），除非是项目标准日志系统的一部分。\n\n## 调试规则\n\n- 先通过日志/检查来追踪实际执行流程，之后再修改代码。盲目修改是你的大敌。\n- 如果调试了超过2次仍未成功，退后一步。重新阅读所有相关代码，检查流程中是否有错误的假设。\n- 优先阅读实际的错误信息和堆栈跟踪，而不是猜测可能出了什么问题。\n- 如果某些东西\"不应该发生\"，验证你的假设——检查类型、控制流和数据。\n- 不要为了隐藏 bug 而添加 try/catch 或默认值。找到根本原因。\n\n## 架构规则\n\n- 不要创建新的抽象层（包装器、辅助函数、基类），除非有多个地方会用到。\n- 不要在现有结构旁边建立平行结构（例如第二个路由系统、另一层数据层）。要么使用现有的，要么替换它——但不要搞两套。\n- 将测试与实现代码一起更新。如果你修改了行为，也要修改测试。\n- 只要有可能就编写纯函数。将副作用推到边界处。\n- 修改公共 API 时，追踪所有调用者和使用处。更新或标记它们。",
-      "source": "自整理",
-      "created_at": "2026-07-16T12:00:00+08:00"
-    }
-  ]
-};
+// ===== Supabase 配置 =====
+const SUPABASE_URL = 'https://ocdsrpjkmfnoupasmqkt.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_nbfWiQMdvMIXWwwtCYt0nQ_SPxE-wP5';
 
-// ===== GitHub API 配置 =====
-const GH_REPO = 'Murphy1998/notes-app';
-// token 存储在 localStorage，首次使用时引导设置
-function getGHToken() { return localStorage.getItem('gh-notes-token') || ''; }
-function setGHToken(t) { localStorage.setItem('gh-notes-token', t); }
-const GH_DB_PATH = 'database.json'; // 仓库中 database.json 的路径
-let __REMOTE_NOTES__ = null; // 远程拉取的最新笔记
-let __SYNCING__ = false; // 是否正在同步
+// ===== 分类定义 =====
+const CATEGORIES = ["AI与机器学习", "编程技术", "产品与设计", "效率工具", "阅读与思考", "其他"];
 
 // ===== 状态 =====
+let __NOTES__ = []; // 所有笔记（从 Supabase 拉取）
 let activeCategory = '全部';
 let activeTag = null;
+
+// ===== Supabase API =====
+async function supaFetch(path, options = {}) {
+  const resp = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
+    ...options,
+    headers: {
+      'apikey': SUPABASE_KEY,
+      'Authorization': `Bearer ${SUPABASE_KEY}`,
+      'Content-Type': 'application/json',
+      ...(options.headers || {})
+    }
+  });
+  return resp;
+}
+
+// 从 Supabase 拉取所有笔记
+async function loadNotes() {
+  try {
+    const resp = await supaFetch('notes?order=created_at.desc');
+    if (!resp.ok) throw new Error('拉取失败');
+    __NOTES__ = await resp.json();
+    render();
+  } catch(e) {
+    console.log('拉取笔记失败:', e);
+    showSyncStatus('加载失败，请检查网络', 'warn');
+  }
+}
+
+// 新增笔记到 Supabase
+async function insertNote(note) {
+  const resp = await supaFetch('notes', {
+    method: 'POST',
+    headers: { 'Prefer': 'return=representation' },
+    body: JSON.stringify(note)
+  });
+  if (!resp.ok) throw new Error('保存失败');
+  return (await resp.json())[0];
+}
+
+// 从 Supabase 删除笔记
+async function removeNote(noteId) {
+  const resp = await supaFetch(`notes?id=eq.${noteId}`, {
+    method: 'DELETE'
+  });
+  if (!resp.ok) throw new Error('删除失败');
+}
 
 // ===== 工具函数 =====
 function formatDate(dateStr) {
@@ -968,147 +853,27 @@ function formatDateGroup(dateStr) {
   return `${y}年${m}月${day}日 ${weekdays[d.getDay()]}`;
 }
 
-// ===== localStorage 本地笔记（仅作为同步失败时的临时缓存） =====
-const LOCAL_NOTES_KEY = 'my-notes-local';
-
-function getLocalNotes() {
-  try {
-    return JSON.parse(localStorage.getItem(LOCAL_NOTES_KEY) || '[]');
-  } catch(e) { return []; }
-}
-
-function saveLocalNotes(notes) {
-  localStorage.setItem(LOCAL_NOTES_KEY, JSON.stringify(notes));
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
 }
 
 function getAllNotes() {
-  // 优先使用远程数据，兜底用构建时注入的静态数据
-  const baseNotes = __REMOTE_NOTES__ || __DATA__.notes;
-  return [...baseNotes, ...getLocalNotes()];
-}
-
-// ===== GitHub API 同步 =====
-async function ghApiFetch(path, options = {}) {
-  const token = getGHToken();
-  if (!token) {
-    showTokenSetup();
-    throw new Error('未设置 GitHub Token');
-  }
-  const resp = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${path}`, {
-    ...options,
-    headers: {
-      'Authorization': `Bearer ${token}`,
-      'Accept': 'application/vnd.github.v3+json',
-      'Content-Type': 'application/json',
-      ...(options.headers || {})
-    }
-  });
-  return resp;
-}
-
-// Token 设置弹窗
-function showTokenSetup() {
-  document.getElementById('tokenOverlay').classList.add('show');
-  setTimeout(() => document.getElementById('tokenInput').focus(), 200);
-}
-
-function closeTokenSetup() {
-  document.getElementById('tokenOverlay').classList.remove('show');
-}
-
-function saveToken() {
-  const val = document.getElementById('tokenInput').value.trim();
-  if (!val) { document.getElementById('tokenInput').style.borderColor='#c55'; return; }
-  setGHToken(val);
-  closeTokenSetup();
-  showSyncStatus('Token 已保存，正在同步...', 'success');
-  initRemoteData();
-}
-
-// Base64 解码（支持 UTF-8 中文）
-function b64DecodeUnicode(str) {
-  const binStr = atob(str);
-  const bytes = Uint8Array.from(binStr, c => c.charCodeAt(0));
-  return new TextDecoder().decode(bytes);
-}
-
-// 从 GitHub 拉取最新 database.json
-async function fetchRemoteNotes() {
-  try {
-    const resp = await ghApiFetch(GH_DB_PATH);
-    if (!resp.ok) return null;
-    const fileInfo = await resp.json();
-    const content = JSON.parse(b64DecodeUnicode(fileInfo.content));
-    return { data: content, sha: fileInfo.sha };
-  } catch(e) {
-    console.log('拉取远程数据失败:', e);
-    return null;
-  }
-}
-
-// 将笔记写入 GitHub 仓库的 database.json
-async function pushToGitHub(newDbData, sha, message) {
-  const content = btoa(unescape(encodeURIComponent(JSON.stringify(newDbData, null, 2))));
-  const resp = await ghApiFetch(GH_DB_PATH, {
-    method: 'PUT',
-    body: JSON.stringify({ message, content, sha })
-  });
-  return resp;
-}
-
-// 页面加载时拉取最新数据
-async function initRemoteData() {
-  if (!getGHToken()) {
-    // 未设置 token，延迟弹出引导
-    setTimeout(() => { if (!getGHToken()) showTokenSetup(); }, 800);
-    return;
-  }
-  const result = await fetchRemoteNotes();
-  if (result) {
-    __REMOTE_NOTES__ = result.data.notes;
-    // 检查是否有待同步的本地笔记
-    const locals = getLocalNotes();
-    if (locals.length > 0) {
-      await syncLocalToRemote(result.data, result.sha, locals);
-    }
-    render();
-  }
-}
-
-// 将本地暂存的笔记同步到 GitHub
-async function syncLocalToRemote(dbData, sha, locals) {
-  try {
-    const newDb = { ...dbData };
-    locals.forEach(n => {
-      const cleanNote = { ...n };
-      delete cleanNote._local;
-      newDb.notes.push(cleanNote);
-    });
-    const resp = await pushToGitHub(newDb, sha, `同步 ${locals.length} 条本地暂存笔记`);
-    if (resp.ok) {
-      saveLocalNotes([]); // 清空本地暂存
-      __REMOTE_NOTES__ = newDb.notes;
-      render();
-    }
-  } catch(e) {
-    console.log('同步本地笔记失败:', e);
-  }
+  return __NOTES__;
 }
 
 function getFilteredNotes() {
   let notes = getAllNotes();
 
-  // 分类筛选
   if (activeCategory !== '全部') {
     notes = notes.filter(n => n.category === activeCategory);
   }
 
-  // 标签筛选
   if (activeTag) {
     notes = notes.filter(n => n.tags && n.tags.includes(activeTag));
   }
 
-  // 搜索筛选
   const query = document.getElementById('searchInput').value.trim().toLowerCase();
   if (query) {
     notes = notes.filter(n => {
@@ -1140,7 +905,7 @@ function getAllTags() {
 function getCategoryCounts() {
   const all = getAllNotes();
   const counts = { '全部': all.length };
-  __DATA__.categories.forEach(cat => {
+  CATEGORIES.forEach(cat => {
     counts[cat] = all.filter(n => n.category === cat).length;
   });
   return counts;
@@ -1152,15 +917,14 @@ function render() {
   const categoryCounts = getCategoryCounts();
   const allTags = getAllTags();
 
-  // 总数
   document.getElementById('totalCount').textContent = notes.length;
 
   // 分类Tab
   const catTabs = document.getElementById('categoryTabs');
-  catTabs.innerHTML = ['全部', ...__DATA__.categories].map(cat => {
+  catTabs.innerHTML = ['全部', ...CATEGORIES].map(cat => {
     const count = categoryCounts[cat] || 0;
     const activeCls = activeCategory === cat ? ' active' : '';
-    return `<span class="category-tab${activeCls}" data-cat="${cat}" onclick="selectCategory('${cat.replace(/'/g, "\\'")}')">
+    return `<span class="category-tab${activeCls}" onclick="selectCategory('${cat.replace(/'/g, "\\'")}')">
       ${cat}<span class="badge">${count}</span>
     </span>`;
   }).join('');
@@ -1170,7 +934,7 @@ function render() {
   if (allTags.length > 0) {
     tagCloud.innerHTML = allTags.map(([tag, count]) => {
       const activeCls = activeTag === tag ? ' active' : '';
-      return `<span class="tag-chip${activeCls}" data-tag="${tag}" onclick="selectTag('${tag.replace(/'/g, "\\'")}')">
+      return `<span class="tag-chip${activeCls}" onclick="selectTag('${tag.replace(/'/g, "\\'")}')">
         #${tag} <span style="opacity:0.6">${count}</span>
       </span>`;
     }).join('');
@@ -1181,11 +945,9 @@ function render() {
 
   // 结果提示
   const hint = document.getElementById('resultHint');
-  if (notes.length === 0) {
-    hint.textContent = '没有找到匹配的笔记，试试换个关键词或分类';
-  } else {
-    hint.textContent = `共 ${notes.length} 条笔记`;
-  }
+  hint.textContent = notes.length === 0
+    ? '没有找到匹配的笔记，试试换个关键词或分类'
+    : `共 ${notes.length} 条笔记`;
 
   // 卡片区
   const cardArea = document.getElementById('cardArea');
@@ -1195,7 +957,7 @@ function render() {
       <div class="empty-state">
         <div class="icon">📭</div>
         <p>这里还没有笔记</p>
-        <p style="font-size:13px;margin-top:4px;">把链接发给 CatPaw，我来帮你整理归档</p>
+        <p style="font-size:13px;margin-top:4px;">点击右下角 + 开始添加</p>
       </div>`;
     return;
   }
@@ -1217,10 +979,8 @@ function render() {
       const isMemo = !n.link;
 
       if (isMemo) {
-        // 备忘型卡片：点击展开/收起
         const contentHtml = n.content ? `<div class="card-content">${escapeHtml(n.content).replace(/\n/g, '<br>')}</div>` : '';
         const copyId = 'copy-' + (n.id || Math.random().toString(36).slice(2));
-        const isLocal = n._local;
         const deleteBtn = `<button class="card-delete-btn" onclick="event.stopPropagation();deleteNote('${(n.id || '').replace(/'/g, "\\'")}')">删除</button>`;
         return `<div class="card card-memo" onclick="toggleMemo(this)">
           <button class="card-copy-btn" id="${copyId}" onclick="event.stopPropagation();copyNote(this, '${(n.id || '').replace(/'/g, "\\'")}')" title="复制全文">复制</button>
@@ -1230,14 +990,12 @@ function render() {
           ${contentHtml}
           <div class="card-meta">
             ${n.source ? `<span class="card-source">${escapeHtml(n.source)}</span>` : ''}
-            ${isLocal ? '<span class="card-source" style="background:#e8f0ea;color:#4a7c59">本地</span>' : ''}
             <span class="card-date">${formatDate(n.created_at)}</span>
             <div class="card-tags">${tagsHtml}</div>
           </div>
           ${deleteBtn}
         </div>`;
       } else {
-        // 链接型卡片：点击跳转
         return `<a class="card" href="${n.link}" target="_blank" rel="noopener">
           <span class="card-external-icon">↗</span>
           <div class="card-title">${escapeHtml(n.title || '无标题')}</div>
@@ -1258,19 +1016,11 @@ function render() {
   }).join('');
 }
 
-function escapeHtml(str) {
-  const div = document.createElement('div');
-  div.textContent = str;
-  return div.innerHTML;
-}
-
-function toggleMemo(el) {
-  el.classList.toggle('expanded');
-}
+// ===== 交互 =====
+function toggleMemo(el) { el.classList.toggle('expanded'); }
 
 function copyNote(btn, noteId) {
-  const allNotes = getAllNotes();
-  const note = allNotes.find(n => n.id === noteId);
+  const note = __NOTES__.find(n => n.id === noteId);
   if (!note) return;
 
   let text = note.title + '\n\n';
@@ -1281,12 +1031,8 @@ function copyNote(btn, noteId) {
   navigator.clipboard.writeText(text.trim()).then(() => {
     btn.textContent = '已复制';
     btn.classList.add('copied');
-    setTimeout(() => {
-      btn.textContent = '复制';
-      btn.classList.remove('copied');
-    }, 1500);
+    setTimeout(() => { btn.textContent = '复制'; btn.classList.remove('copied'); }, 1500);
   }).catch(() => {
-    // fallback
     const ta = document.createElement('textarea');
     ta.value = text.trim();
     ta.style.position = 'fixed';
@@ -1297,10 +1043,7 @@ function copyNote(btn, noteId) {
     document.body.removeChild(ta);
     btn.textContent = '已复制';
     btn.classList.add('copied');
-    setTimeout(() => {
-      btn.textContent = '复制';
-      btn.classList.remove('copied');
-    }, 1500);
+    setTimeout(() => { btn.textContent = '复制'; btn.classList.remove('copied'); }, 1500);
   });
 }
 
@@ -1346,9 +1089,8 @@ function openNewNote() {
   document.getElementById('noteSummary').value = '';
   document.getElementById('noteContent').value = '';
 
-  // 填充分类下拉
   const sel = document.getElementById('noteCategory');
-  sel.innerHTML = __DATA__.categories.map(c => `<option value="${c}">${c}</option>`).join('');
+  sel.innerHTML = CATEGORIES.map(c => `<option value="${c}">${c}</option>`).join('');
 
   document.getElementById('modalOverlay').classList.add('show');
   setTimeout(() => document.getElementById('noteTitle').focus(), 200);
@@ -1371,12 +1113,11 @@ async function saveNote() {
 
   const tags = tagsStr ? tagsStr.split(/[,，]/).map(t => t.trim()).filter(Boolean) : [];
 
-  const noteId = 'n' + Date.now().toString(36);
   const note = {
-    id: noteId,
-    title: title,
-    category: category,
-    tags: tags,
+    id: 'n' + Date.now().toString(36),
+    title,
+    category,
+    tags,
     summary: summary || '',
     source: source || '',
     created_at: new Date().toISOString()
@@ -1385,68 +1126,35 @@ async function saveNote() {
   if (link) note.link = link;
   if (content) note.content = content;
 
-  // 先关闭弹窗，显示同步状态
   closeModal();
   showSyncStatus('正在保存...');
 
   try {
-    // 从 GitHub 拉取最新数据
-    const result = await fetchRemoteNotes();
-    if (!result) throw new Error('无法连接 GitHub');
-
-    // 追加新笔记
-    const newDb = { ...result.data };
-    newDb.notes.push(note);
-
-    // 推送到 GitHub
-    const resp = await pushToGitHub(newDb, result.sha, `新增笔记: ${title}`);
-    if (!resp.ok) throw new Error('推送失败');
-
-    __REMOTE_NOTES__ = newDb.notes;
-    showSyncStatus('保存成功！页面将在1-2分钟后自动更新', 'success');
+    const saved = await insertNote(note);
+    __NOTES__.unshift(saved);
+    render();
+    showSyncStatus('保存成功！', 'success');
   } catch(e) {
-    console.log('保存到 GitHub 失败，暂存本地:', e);
-    note._local = true;
-    const locals = getLocalNotes();
-    locals.push(note);
-    saveLocalNotes(locals);
-    showSyncStatus('网络异常，已暂存本地，联网后自动同步', 'warn');
+    console.log('保存失败:', e);
+    showSyncStatus('保存失败，请检查网络后重试', 'warn');
   }
-  render();
 }
 
 async function deleteNote(noteId) {
   if (!confirm('确定删除这条笔记？')) return;
 
-  // 如果是本地暂存的笔记，直接从 localStorage 删除
-  const locals = getLocalNotes();
-  if (locals.some(n => n.id === noteId)) {
-    saveLocalNotes(locals.filter(n => n.id !== noteId));
-    render();
-    return;
-  }
-
-  // 远程笔记，从 GitHub 删除
   showSyncStatus('正在删除...');
   try {
-    const result = await fetchRemoteNotes();
-    if (!result) throw new Error('无法连接 GitHub');
-
-    const newDb = { ...result.data };
-    newDb.notes = newDb.notes.filter(n => n.id !== noteId);
-
-    const resp = await pushToGitHub(newDb, result.sha, `删除笔记: ${noteId}`);
-    if (!resp.ok) throw new Error('删除失败');
-
-    __REMOTE_NOTES__ = newDb.notes;
+    await removeNote(noteId);
+    __NOTES__ = __NOTES__.filter(n => n.id !== noteId);
+    render();
     showSyncStatus('删除成功', 'success');
   } catch(e) {
     showSyncStatus('删除失败，请稍后重试', 'warn');
   }
-  render();
 }
 
-// 同步状态提示
+// ===== 状态提示 =====
 function showSyncStatus(msg, type) {
   let el = document.getElementById('syncStatus');
   if (!el) {
@@ -1485,8 +1193,7 @@ function unlockApp() {
     sessionStorage.setItem('notes-auth', __PWD_HASH__);
     document.getElementById('lockScreen').classList.add('hidden');
     hint.textContent = '';
-    // 解锁后拉取远程数据（会自动引导设置 Token）
-    initRemoteData();
+    loadNotes(); // 解锁后从 Supabase 拉取数据
   } else {
     input.classList.add('error');
     hint.textContent = '密码错误，请重试';
@@ -1495,41 +1202,18 @@ function unlockApp() {
   }
 }
 
-// 初始化：检查是否已验证
+// ===== 初始化 =====
 if (checkAuth()) {
   document.getElementById('lockScreen').classList.add('hidden');
-}
-
-// ===== 初始渲染 =====
-render();
-
-// ===== 拉取远程最新数据（仅已通过密码验证时） =====
-if (checkAuth()) {
-  initRemoteData();
+  loadNotes();
 }
 
 // ===== PWA Service Worker =====
 if ('serviceWorker' in navigator) {
-  // 先清理所有旧缓存
+  // 清理所有旧缓存和旧 SW
   caches.keys().then(keys => keys.forEach(k => caches.delete(k)));
-  // 注销旧 SW 后重新注册，确保加载最新代码
   navigator.serviceWorker.getRegistrations().then(regs => {
-    const p = regs.map(r => r.unregister());
-    return Promise.all(p);
-  }).then(() => {
-    navigator.serviceWorker.register('./sw.js?v=3').then(reg => {
-      reg.addEventListener('updatefound', () => {
-        const newWorker = reg.installing;
-        newWorker.addEventListener('statechange', () => {
-          if (newWorker.state === 'activated') {
-            console.log('SW updated, reloading...');
-          }
-        });
-      });
-      console.log('SW registered:', reg.scope);
-    });
-  }).catch(err => {
-    console.log('SW registration failed:', err);
+    regs.forEach(r => r.unregister());
   });
 }
 </script>
