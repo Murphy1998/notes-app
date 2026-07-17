@@ -44,588 +44,106 @@
     padding-bottom: env(safe-area-inset-bottom);
   }
 
-  /* ===== 顶栏 ===== */
-  .topbar {
-    position: sticky; top: 0; z-index: 100;
-    background: rgba(248, 246, 242, 0.85);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    border-bottom: 1px solid var(--border);
-    padding: 12px 0;
-  }
-
-  .topbar-inner {
-    max-width: 720px;
-    margin: 0 auto;
-    padding: 0 24px;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-  }
-
-  .logo {
-    font-size: 20px;
-    font-weight: 700;
-    color: var(--text);
-    white-space: nowrap;
-    letter-spacing: -0.5px;
-  }
-
-  .search-box {
-    flex: 1;
-    position: relative;
-  }
-
-  .search-box input {
-    width: 100%;
-    padding: 8px 14px 8px 36px;
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    font-size: 14px;
-    background: var(--card-bg);
-    color: var(--text);
-    outline: none;
-    transition: all 0.2s;
-  }
-
-  .search-box input:focus {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px var(--accent-light);
-  }
-
+  .topbar { position: sticky; top: 0; z-index: 100; background: rgba(248,246,242,0.85); backdrop-filter: blur(20px) saturate(180%); -webkit-backdrop-filter: blur(20px) saturate(180%); border-bottom: 1px solid var(--border); padding: 12px 0; }
+  .topbar-inner { max-width: 720px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; gap: 16px; }
+  .logo { font-size: 20px; font-weight: 700; color: var(--text); white-space: nowrap; letter-spacing: -0.5px; }
+  .search-box { flex: 1; position: relative; }
+  .search-box input { width: 100%; padding: 8px 14px 8px 36px; border: 1px solid var(--border); border-radius: 20px; font-size: 14px; background: var(--card-bg); color: var(--text); outline: none; transition: all 0.2s; }
+  .search-box input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-light); }
   .search-box input::placeholder { color: var(--text-muted); }
+  .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 16px; pointer-events: none; }
+  .stats { display: flex; align-items: center; gap: 4px; font-size: 13px; color: var(--text-secondary); white-space: nowrap; }
+  .stats .count { font-weight: 700; color: var(--accent); font-size: 18px; }
 
-  .search-icon {
-    position: absolute;
-    left: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--text-muted);
-    font-size: 16px;
-    pointer-events: none;
-  }
+  .main { max-width: 720px; margin: 0 auto; padding: 20px 24px 60px; }
 
-  .stats {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    font-size: 13px;
-    color: var(--text-secondary);
-    white-space: nowrap;
-  }
+  .category-tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 20px; }
+  .category-tab { padding: 6px 16px; border-radius: 20px; font-size: 13px; cursor: pointer; border: 1px solid var(--border); background: var(--card-bg); color: var(--text-secondary); transition: all 0.2s; user-select: none; }
+  .category-tab:hover { border-color: var(--accent); color: var(--accent); }
+  .category-tab.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .category-tab .badge { display: inline-block; background: rgba(255,255,255,0.25); border-radius: 10px; padding: 0 6px; margin-left: 4px; font-size: 11px; min-width: 18px; text-align: center; }
+  .category-tab:not(.active) .badge { background: var(--tag-bg); }
 
-  .stats .count {
-    font-weight: 700;
-    color: var(--accent);
-    font-size: 18px;
-  }
+  .tag-cloud { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 24px; }
+  .tag-chip { padding: 4px 12px; border-radius: 14px; font-size: 12px; cursor: pointer; background: var(--tag-bg); color: var(--tag-text); border: 1px solid transparent; transition: all 0.2s; user-select: none; }
+  .tag-chip:hover { border-color: var(--accent); color: var(--accent); }
+  .tag-chip.active { background: var(--accent-light); color: var(--accent); border-color: var(--accent); font-weight: 600; }
 
-  /* ===== 主布局 ===== */
-  .main {
-    max-width: 720px;
-    margin: 0 auto;
-    padding: 20px 24px 60px;
-  }
-
-  /* ===== 分类 Tab ===== */
-  .category-tabs {
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-    margin-bottom: 20px;
-  }
-
-  .category-tab {
-    padding: 6px 16px;
-    border-radius: 20px;
-    font-size: 13px;
-    cursor: pointer;
-    border: 1px solid var(--border);
-    background: var(--card-bg);
-    color: var(--text-secondary);
-    transition: all 0.2s;
-    user-select: none;
-  }
-
-  .category-tab:hover {
-    border-color: var(--accent);
-    color: var(--accent);
-  }
-
-  .category-tab.active {
-    background: var(--accent);
-    color: #fff;
-    border-color: var(--accent);
-  }
-
-  .category-tab .badge {
-    display: inline-block;
-    background: rgba(255,255,255,0.25);
-    border-radius: 10px;
-    padding: 0 6px;
-    margin-left: 4px;
-    font-size: 11px;
-    min-width: 18px;
-    text-align: center;
-  }
-
-  .category-tab:not(.active) .badge {
-    background: var(--tag-bg);
-  }
-
-  /* ===== 标签云 ===== */
-  .tag-cloud {
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-    margin-bottom: 24px;
-  }
-
-  .tag-chip {
-    padding: 4px 12px;
-    border-radius: 14px;
-    font-size: 12px;
-    cursor: pointer;
-    background: var(--tag-bg);
-    color: var(--tag-text);
-    border: 1px solid transparent;
-    transition: all 0.2s;
-    user-select: none;
-  }
-
-  .tag-chip:hover {
-    border-color: var(--accent);
-    color: var(--accent);
-  }
-
-  .tag-chip.active {
-    background: var(--accent-light);
-    color: var(--accent);
-    border-color: var(--accent);
-    font-weight: 600;
-  }
-
-  /* ===== 结果提示 ===== */
-  .result-hint {
-    text-align: center;
-    padding: 12px;
-    font-size: 13px;
-    color: var(--text-secondary);
-  }
-
-  /* ===== 日期分组 ===== */
+  .result-hint { text-align: center; padding: 12px; font-size: 13px; color: var(--text-secondary); }
   .date-group { margin-bottom: 28px; }
+  .date-label { font-size: 12px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; padding-left: 4px; }
+  .card-flow { display: flex; flex-direction: column; gap: 10px; }
 
-  .date-label {
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 12px;
-    padding-left: 4px;
-  }
-
-  /* ===== 卡片流 ===== */
-  .card-flow {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .card {
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 18px 20px;
-    box-shadow: var(--shadow);
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-    cursor: pointer;
-    position: relative;
-    text-decoration: none;
-    color: inherit;
-    display: block;
-  }
-
-  .card:hover {
-    box-shadow: var(--shadow-hover);
-    transform: translateY(-1px);
-    border-color: #d5cfc4;
-  }
-
-  .card-title {
-    font-size: 16px;
-    font-weight: 600;
-    margin-bottom: 6px;
-    color: var(--text);
-  }
-
-  .card-summary {
-    font-size: 14px;
-    color: var(--text-secondary);
-    line-height: 1.7;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-
-  .card-meta {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-top: 12px;
-    flex-wrap: wrap;
-  }
-
-  .card-source {
-    font-size: 11px;
-    padding: 2px 8px;
-    border-radius: 4px;
-    background: #f5f3ef;
-    color: var(--text-secondary);
-  }
-
-  .card-date {
-    font-size: 11px;
-    color: var(--text-muted);
-  }
-
-  .card-tags {
-    display: flex;
-    gap: 4px;
-    flex-wrap: wrap;
-  }
-
-  .card-tag {
-    font-size: 11px;
-    padding: 2px 8px;
-    border-radius: 10px;
-    background: var(--accent-light);
-    color: var(--accent);
-  }
-
-  .card-external-icon {
-    position: absolute;
-    top: 18px;
-    right: 20px;
-    color: var(--text-muted);
-    font-size: 14px;
-    opacity: 0;
-    transition: opacity 0.2s;
-  }
-
+  .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 20px; box-shadow: var(--shadow); transition: all 0.25s cubic-bezier(0.4,0,0.2,1); cursor: pointer; position: relative; text-decoration: none; color: inherit; display: block; }
+  .card:hover { box-shadow: var(--shadow-hover); transform: translateY(-1px); border-color: #d5cfc4; }
+  .card-title { font-size: 16px; font-weight: 600; margin-bottom: 6px; color: var(--text); }
+  .card-summary { font-size: 14px; color: var(--text-secondary); line-height: 1.7; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+  .card-meta { display: flex; align-items: center; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
+  .card-source { font-size: 11px; padding: 2px 8px; border-radius: 4px; background: #f5f3ef; color: var(--text-secondary); }
+  .card-date { font-size: 11px; color: var(--text-muted); }
+  .card-tags { display: flex; gap: 4px; flex-wrap: wrap; }
+  .card-tag { font-size: 11px; padding: 2px 8px; border-radius: 10px; background: var(--accent-light); color: var(--accent); }
+  .card-external-icon { position: absolute; top: 18px; right: 20px; color: var(--text-muted); font-size: 14px; opacity: 0; transition: opacity 0.2s; }
   .card:hover .card-external-icon { opacity: 1; }
 
-  /* ===== 备忘型卡片 ===== */
-  .card.card-memo {
-    cursor: pointer;
-    border-left: 3px solid var(--accent);
-  }
-
-  .card-memo-icon {
-    position: absolute;
-    top: 18px;
-    right: 20px;
-    color: var(--text-muted);
-    font-size: 12px;
-    transition: transform 0.3s;
-  }
-
+  .card.card-memo { cursor: pointer; border-left: 3px solid var(--accent); }
+  .card-memo-icon { position: absolute; top: 18px; right: 20px; color: var(--text-muted); font-size: 12px; transition: transform 0.3s; }
   .card.card-memo.expanded .card-memo-icon { transform: rotate(180deg); }
-
-  .card-content {
-    font-size: 14px;
-    color: var(--text);
-    line-height: 1.8;
-    margin-top: 12px;
-    padding-top: 12px;
-    border-top: 1px dashed var(--border);
-    white-space: pre-wrap;
-    max-height: 0;
-    overflow: hidden;
-    opacity: 0;
-    transition: max-height 0.35s ease, opacity 0.25s ease, margin-top 0.3s ease, padding-top 0.3s ease;
-    margin-top: 0;
-    padding-top: 0;
-  }
-
-  .card.card-memo.expanded .card-content {
-    max-height: 2000px;
-    opacity: 1;
-    margin-top: 12px;
-    padding-top: 12px;
-  }
-
+  .card-content { font-size: 14px; color: var(--text); line-height: 1.8; margin-top: 0; padding-top: 0; border-top: 1px dashed var(--border); white-space: pre-wrap; max-height: 0; overflow: hidden; opacity: 0; transition: max-height 0.35s ease, opacity 0.25s ease, margin-top 0.3s ease, padding-top 0.3s ease; }
+  .card.card-memo.expanded .card-content { max-height: 2000px; opacity: 1; margin-top: 12px; padding-top: 12px; }
   .card.card-memo.expanded .card-summary { -webkit-line-clamp: unset; }
 
-  .card-copy-btn {
-    display: none;
-    position: absolute;
-    top: 16px;
-    right: 44px;
-    padding: 4px 10px;
-    font-size: 12px;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    background: var(--card-bg);
-    color: var(--text-secondary);
-    cursor: pointer;
-    transition: all 0.2s;
-    z-index: 2;
-  }
-
+  .card-copy-btn { display: none; position: absolute; top: 16px; right: 44px; padding: 4px 10px; font-size: 12px; border: 1px solid var(--border); border-radius: 6px; background: var(--card-bg); color: var(--text-secondary); cursor: pointer; transition: all 0.2s; z-index: 2; }
   .card.card-memo.expanded .card-copy-btn { display: inline-block; }
+  .card-copy-btn:hover { background: var(--accent-light); color: var(--accent); border-color: var(--accent); }
+  .card-copy-btn.copied { background: var(--accent); color: #fff; border-color: var(--accent); }
 
-  .card-copy-btn:hover {
-    background: var(--accent-light);
-    color: var(--accent);
-    border-color: var(--accent);
-  }
-
-  .card-copy-btn.copied {
-    background: var(--accent);
-    color: #fff;
-    border-color: var(--accent);
-  }
-
-  /* ===== 空状态 ===== */
-  .empty-state {
-    text-align: center;
-    padding: 60px 20px;
-    color: var(--text-muted);
-  }
-
+  .empty-state { text-align: center; padding: 60px 20px; color: var(--text-muted); }
   .empty-state .icon { font-size: 48px; margin-bottom: 12px; }
   .empty-state p { font-size: 14px; line-height: 1.8; }
 
-  /* ===== 浮动新建按钮 ===== */
-  .fab {
-    position: fixed;
-    bottom: 28px;
-    right: 28px;
-    width: 52px;
-    height: 52px;
-    border-radius: 50%;
-    background: var(--accent);
-    color: #fff;
-    font-size: 28px;
-    border: none;
-    cursor: pointer;
-    box-shadow: 0 4px 14px rgba(74,124,89,0.4);
-    z-index: 200;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s;
-    padding-bottom: env(safe-area-inset-bottom);
-  }
-
+  .fab { position: fixed; bottom: 28px; right: 28px; width: 52px; height: 52px; border-radius: 50%; background: var(--accent); color: #fff; font-size: 28px; border: none; cursor: pointer; box-shadow: 0 4px 14px rgba(74,124,89,0.4); z-index: 200; display: flex; align-items: center; justify-content: center; transition: all 0.2s; padding-bottom: env(safe-area-inset-bottom); }
   .fab:hover { transform: scale(1.1); box-shadow: 0 6px 20px rgba(74,124,89,0.5); }
   .fab:active { transform: scale(0.95); }
 
-  /* ===== 弹窗遮罩 ===== */
-  .modal-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.35);
-    z-index: 300;
-    align-items: flex-end;
-    justify-content: center;
-  }
-
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.35); z-index: 300; align-items: flex-end; justify-content: center; }
   .modal-overlay.show { display: flex; }
-
-  .modal {
-    background: var(--card-bg);
-    width: 100%;
-    max-width: 560px;
-    border-radius: 16px 16px 0 0;
-    padding: 20px 24px calc(20px + env(safe-area-inset-bottom));
-    box-shadow: 0 -4px 24px rgba(0,0,0,0.12);
-    animation: slideUp 0.25s ease;
-    max-height: 85vh;
-    overflow-y: auto;
-  }
-
-  @keyframes slideUp {
-    from { transform: translateY(100%); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
-  }
-
-  .modal-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 16px;
-  }
-
-  .modal-header h3 {
-    font-size: 17px;
-    font-weight: 600;
-    color: var(--text);
-  }
-
-  .modal-close {
-    background: none;
-    border: none;
-    font-size: 22px;
-    color: var(--text-muted);
-    cursor: pointer;
-    padding: 4px 8px;
-    border-radius: 6px;
-  }
-
+  .modal { background: var(--card-bg); width: 100%; max-width: 560px; border-radius: 16px 16px 0 0; padding: 20px 24px calc(20px + env(safe-area-inset-bottom)); box-shadow: 0 -4px 24px rgba(0,0,0,0.12); animation: slideUp 0.25s ease; max-height: 85vh; overflow-y: auto; }
+  @keyframes slideUp { from { transform: translateY(100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  .modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+  .modal-header h3 { font-size: 17px; font-weight: 600; color: var(--text); }
+  .modal-close { background: none; border: none; font-size: 22px; color: var(--text-muted); cursor: pointer; padding: 4px 8px; border-radius: 6px; }
   .modal-close:hover { background: var(--tag-bg); }
-
   .form-group { margin-bottom: 14px; }
-
-  .form-group label {
-    display: block;
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--text-secondary);
-    margin-bottom: 5px;
-  }
-
-  .form-group input,
-  .form-group textarea,
-  .form-group select {
-    width: 100%;
-    padding: 10px 12px;
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    font-size: 14px;
-    font-family: inherit;
-    color: var(--text);
-    background: var(--bg);
-    outline: none;
-    transition: border-color 0.2s;
-  }
-
-  .form-group input:focus,
-  .form-group textarea:focus,
-  .form-group select:focus {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px var(--accent-light);
-  }
-
+  .form-group label { display: block; font-size: 12px; font-weight: 600; color: var(--text-secondary); margin-bottom: 5px; }
+  .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 14px; font-family: inherit; color: var(--text); background: var(--bg); outline: none; transition: border-color 0.2s; }
+  .form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-light); }
   .form-group textarea { min-height: 80px; resize: vertical; }
-
   .form-row { display: flex; gap: 10px; }
   .form-row .form-group { flex: 1; }
-
   .form-actions { display: flex; gap: 10px; margin-top: 18px; }
-
-  .btn {
-    flex: 1;
-    padding: 10px;
-    border-radius: var(--radius-sm);
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    border: 1px solid var(--border);
-    transition: all 0.2s;
-  }
-
-  .btn-primary {
-    background: var(--accent);
-    color: #fff;
-    border-color: var(--accent);
-  }
-
+  .btn { flex: 1; padding: 10px; border-radius: var(--radius-sm); font-size: 14px; font-weight: 600; cursor: pointer; border: 1px solid var(--border); transition: all 0.2s; }
+  .btn-primary { background: var(--accent); color: #fff; border-color: var(--accent); }
   .btn-primary:hover { opacity: 0.9; }
-
-  .btn-secondary {
-    background: var(--card-bg);
-    color: var(--text-secondary);
-  }
-
+  .btn-secondary { background: var(--card-bg); color: var(--text-secondary); }
   .btn-secondary:hover { background: var(--tag-bg); }
 
-  /* ===== 编辑按钮 ===== */
-  .card-edit-btn {
-    display: none;
-    position: absolute;
-    bottom: 16px;
-    right: 64px;
-    padding: 3px 8px;
-    font-size: 11px;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    background: #fff;
-    color: var(--accent);
-    cursor: pointer;
-    transition: all 0.2s;
-    z-index: 2;
-  }
-
+  .card-edit-btn { display: none; position: absolute; bottom: 16px; right: 64px; padding: 3px 8px; font-size: 11px; border: 1px solid var(--border); border-radius: 6px; background: #fff; color: var(--accent); cursor: pointer; transition: all 0.2s; z-index: 2; }
   .card.card-memo.expanded .card-edit-btn { display: inline-block; }
-
-  .card-edit-btn:hover {
-    background: var(--accent-light);
-    border-color: var(--accent);
-  }
-
+  .card-edit-btn:hover { background: var(--accent-light); border-color: var(--accent); }
   .card-link-edit { display: none !important; }
   .card.card-link:hover .card-link-edit { display: inline-block !important; }
+  @media (max-width: 600px) { .card-link-edit { display: inline-block !important; opacity: 0.6; } }
 
-  @media (max-width: 600px) {
-    .card-link-edit { display: inline-block !important; opacity: 0.6; }
-  }
-
-  /* ===== 删除按钮 ===== */
-  .card-delete-btn {
-    display: none;
-    position: absolute;
-    bottom: 16px;
-    right: 20px;
-    padding: 3px 8px;
-    font-size: 11px;
-    border: 1px solid #e0c8c8;
-    border-radius: 6px;
-    background: #fff;
-    color: #b55;
-    cursor: pointer;
-    transition: all 0.2s;
-    z-index: 2;
-  }
-
+  .card-delete-btn { display: none; position: absolute; bottom: 16px; right: 20px; padding: 3px 8px; font-size: 11px; border: 1px solid #e0c8c8; border-radius: 6px; background: #fff; color: #b55; cursor: pointer; transition: all 0.2s; z-index: 2; }
   .card.card-memo.expanded .card-delete-btn { display: inline-block; }
+  .card-delete-btn:hover { background: #fde8e8; border-color: #c88; }
 
-  .card-delete-btn:hover {
-    background: #fde8e8;
-    border-color: #c88;
-  }
-
-  /* ===== 状态提示 ===== */
-  .sync-status {
-    display: none;
-    position: fixed;
-    top: 16px;
-    left: 50%;
-    transform: translateX(-50%);
-    padding: 10px 24px;
-    border-radius: 20px;
-    font-size: 13px;
-    font-weight: 500;
-    background: #333;
-    color: #fff;
-    z-index: 10000;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
-    animation: fadeIn 0.2s ease;
-  }
-
+  .sync-status { display: none; position: fixed; top: 16px; left: 50%; transform: translateX(-50%); padding: 10px 24px; border-radius: 20px; font-size: 13px; font-weight: 500; background: #333; color: #fff; z-index: 10000; box-shadow: 0 4px 16px rgba(0,0,0,0.15); animation: fadeIn 0.2s ease; }
   .sync-status.success { background: var(--accent); }
   .sync-status.warn { background: #c57a20; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateX(-50%) translateY(-10px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
 
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateX(-50%) translateY(-10px); }
-    to { opacity: 1; transform: translateX(-50%) translateY(0); }
-  }
-
-  /* ===== 响应式 ===== */
   @media (max-width: 600px) {
     .topbar-inner { flex-wrap: wrap; gap: 10px; }
     .search-box { order: 3; flex-basis: 100%; }
@@ -634,9 +152,38 @@
     .fab { bottom: 20px; right: 20px; }
   }
 
+  /* ===== 密码设置/解锁屏 ===== */
+  .lock-screen { position: fixed; inset: 0; z-index: 9999; background: var(--bg); display: flex; align-items: center; justify-content: center; flex-direction: column; }
+  .lock-screen.hidden { display: none; }
+  .lock-box { text-align: center; padding: 40px; max-width: 360px; }
+  .lock-icon { font-size: 48px; margin-bottom: 16px; }
+  .lock-title { font-size: 20px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+  .lock-subtitle { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; line-height: 1.7; }
+  .lock-input { width: 240px; padding: 12px 16px; border: 2px solid var(--border); border-radius: 12px; font-size: 18px; text-align: center; letter-spacing: 4px; background: var(--card-bg); color: var(--text); outline: none; transition: border-color 0.2s; }
+  .lock-input:focus { border-color: var(--accent); box-shadow: 0 0 0 4px var(--accent-light); }
+  .lock-input.error { border-color: #c55; animation: lockShake 0.4s ease; }
+  @keyframes lockShake { 0%, 100% { transform: translateX(0); } 20%, 60% { transform: translateX(-8px); } 40%, 80% { transform: translateX(8px); } }
+  .lock-hint { font-size: 12px; color: #c55; margin-top: 10px; height: 18px; }
+  .lock-btn { margin-top: 16px; padding: 10px 36px; border: none; border-radius: 10px; background: var(--accent); color: #fff; font-size: 15px; font-weight: 600; cursor: pointer; transition: opacity 0.2s; }
+  .lock-btn:hover { opacity: 0.9; }
+  .lock-encrypt-badge { display: inline-block; margin-top: 20px; padding: 4px 12px; border-radius: 12px; font-size: 11px; background: var(--accent-light); color: var(--accent); }
 </style>
 </head>
 <body>
+
+<!-- 密码屏（设置/解锁） -->
+<div class="lock-screen" id="lockScreen">
+  <div class="lock-box">
+    <div class="lock-icon" id="lockIcon">🔐</div>
+    <div class="lock-title" id="lockTitle">设置加密密码</div>
+    <div class="lock-subtitle" id="lockSubtitle">所有笔记内容将在浏览器端加密后存储<br>即使数据库泄露，他人也无法读取</div>
+    <input class="lock-input" id="lockInput" type="password" maxlength="32" placeholder="输入密码" autofocus
+      onkeydown="if(event.key==='Enter')handleLock()">
+    <div class="lock-hint" id="lockHint"></div>
+    <button class="lock-btn" id="lockBtn" onclick="handleLock()">确认</button>
+    <div class="lock-encrypt-badge">🔒 端到端加密 · 数据仅你可见</div>
+  </div>
+</div>
 
 <!-- 顶栏 -->
 <div class="topbar">
@@ -663,7 +210,7 @@
 <!-- 浮动新建按钮 -->
 <button class="fab" onclick="openNewNote()" title="新建笔记">+</button>
 
-<!-- 新建笔记弹窗 -->
+<!-- 新建/编辑笔记弹窗 -->
 <div class="modal-overlay" id="modalOverlay" onclick="if(event.target===this)closeModal()">
   <div class="modal">
     <div class="modal-header">
@@ -708,18 +255,178 @@
 </div>
 
 <script>
-// ===== Supabase 配置 =====
+// ===== 配置 =====
 const SUPABASE_URL = 'https://ocdsrpjkmfnoupasmqkt.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_nbfWiQMdvMIXWwwtCYt0nQ_SPxE-wP5';
-
-// ===== 分类定义 =====
 const CATEGORIES = ["AI与机器学习", "编程技术", "产品与设计", "效率工具", "阅读与思考", "其他"];
+const ENCRYPTED_FIELDS = ['title', 'summary', 'content', 'link', 'source']; // tags 单独处理
+const SALT_KEY = 'notes-e2e-salt';
+const VERIFY_KEY = 'notes-e2e-verify'; // 用于验证密码是否正确
 
 // ===== 状态 =====
-let __NOTES__ = []; // 所有笔记（从 Supabase 拉取）
+let __NOTES__ = [];
+let __CRYPTO_KEY__ = null; // AES-GCM 密钥
 let activeCategory = '全部';
 let activeTag = null;
-let __EDITING_ID__ = null; // 正在编辑的笔记 ID，null 表示新建
+let __EDITING_ID__ = null;
+
+// ===== 端到端加密模块（Web Crypto API）=====
+
+// 获取或生成 salt（每个用户唯一，存 localStorage）
+function getSalt() {
+  let saltHex = localStorage.getItem(SALT_KEY);
+  if (!saltHex) {
+    const salt = crypto.getRandomValues(new Uint8Array(16));
+    saltHex = Array.from(salt).map(b => b.toString(16).padStart(2, '0')).join('');
+    localStorage.setItem(SALT_KEY, saltHex);
+  }
+  return new Uint8Array(saltHex.match(/.{2}/g).map(h => parseInt(h, 16)));
+}
+
+// 从密码派生 AES-256-GCM 密钥（PBKDF2, 100000 轮）
+async function deriveKey(password) {
+  const enc = new TextEncoder();
+  const keyMaterial = await crypto.subtle.importKey('raw', enc.encode(password), 'PBKDF2', false, ['deriveKey']);
+  return crypto.subtle.deriveKey(
+    { name: 'PBKDF2', salt: getSalt(), iterations: 100000, hash: 'SHA-256' },
+    keyMaterial,
+    { name: 'AES-GCM', length: 256 },
+    false,
+    ['encrypt', 'decrypt']
+  );
+}
+
+// 加密字符串 → base64(iv + ciphertext)
+async function encryptStr(plaintext) {
+  if (!plaintext) return '';
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const enc = new TextEncoder();
+  const ciphertext = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, __CRYPTO_KEY__, enc.encode(plaintext));
+  const combined = new Uint8Array(iv.length + ciphertext.byteLength);
+  combined.set(iv);
+  combined.set(new Uint8Array(ciphertext), iv.length);
+  return btoa(String.fromCharCode(...combined));
+}
+
+// 解密 base64(iv + ciphertext) → 字符串
+async function decryptStr(encoded) {
+  if (!encoded) return '';
+  try {
+    const combined = Uint8Array.from(atob(encoded), c => c.charCodeAt(0));
+    const iv = combined.slice(0, 12);
+    const ciphertext = combined.slice(12);
+    const decrypted = await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, __CRYPTO_KEY__, ciphertext);
+    return new TextDecoder().decode(decrypted);
+  } catch(e) {
+    return '[解密失败]';
+  }
+}
+
+// 加密笔记对象（写入前）
+async function encryptNote(note) {
+  const encrypted = { ...note };
+  for (const field of ENCRYPTED_FIELDS) {
+    if (encrypted[field]) encrypted[field] = await encryptStr(encrypted[field]);
+  }
+  // tags 数组：序列化后加密为单个字符串
+  if (encrypted.tags && encrypted.tags.length > 0) {
+    encrypted.tags_encrypted = await encryptStr(JSON.stringify(encrypted.tags));
+    encrypted.tags = []; // Supabase 中存空数组
+  }
+  return encrypted;
+}
+
+// 解密笔记对象（读取后）
+async function decryptNote(note) {
+  const decrypted = { ...note };
+  for (const field of ENCRYPTED_FIELDS) {
+    if (decrypted[field]) decrypted[field] = await decryptStr(decrypted[field]);
+  }
+  // tags：从加密字段恢复
+  if (decrypted.tags_encrypted) {
+    try {
+      const tagsJson = await decryptStr(decrypted.tags_encrypted);
+      decrypted.tags = JSON.parse(tagsJson);
+    } catch(e) {
+      decrypted.tags = [];
+    }
+  }
+  return decrypted;
+}
+
+// 生成密码验证标记（用于判断密码是否正确）
+async function generateVerifyToken() {
+  return await encryptStr('notes-verify-ok');
+}
+
+async function checkVerifyToken(token) {
+  const result = await decryptStr(token);
+  return result === 'notes-verify-ok';
+}
+
+// ===== 密码屏逻辑 =====
+function isFirstTime() {
+  return !localStorage.getItem(VERIFY_KEY);
+}
+
+function initLockScreen() {
+  if (isFirstTime()) {
+    document.getElementById('lockIcon').textContent = '🔐';
+    document.getElementById('lockTitle').textContent = '设置加密密码';
+    document.getElementById('lockSubtitle').innerHTML = '首次使用，请设置一个加密密码<br>所有笔记将在浏览器端加密后存储<br><strong style="color:var(--accent)">请牢记此密码，忘记将无法恢复数据</strong>';
+    document.getElementById('lockBtn').textContent = '设置密码';
+    document.getElementById('lockInput').placeholder = '设置密码';
+  } else {
+    document.getElementById('lockIcon').textContent = '🔒';
+    document.getElementById('lockTitle').textContent = '输入加密密码';
+    document.getElementById('lockSubtitle').innerHTML = '请输入密码解密笔记';
+    document.getElementById('lockBtn').textContent = '解锁';
+    document.getElementById('lockInput').placeholder = '输入密码';
+  }
+}
+
+async function handleLock() {
+  const input = document.getElementById('lockInput');
+  const hint = document.getElementById('lockHint');
+  const pwd = input.value.trim();
+
+  if (!pwd || pwd.length < 1) {
+    hint.textContent = '请输入密码';
+    return;
+  }
+
+  try {
+    __CRYPTO_KEY__ = await deriveKey(pwd);
+
+    if (isFirstTime()) {
+      // 首次设置：生成验证标记
+      const token = await generateVerifyToken();
+      localStorage.setItem(VERIFY_KEY, token);
+      // 同时存 salt 到 Supabase，方便换设备时恢复（salt 不含密码信息，安全）
+      document.getElementById('lockScreen').classList.add('hidden');
+      hint.textContent = '';
+      showSyncStatus('加密密码已设置！', 'success');
+      loadNotes();
+    } else {
+      // 验证密码
+      const token = localStorage.getItem(VERIFY_KEY);
+      const ok = await checkVerifyToken(token);
+      if (ok) {
+        document.getElementById('lockScreen').classList.add('hidden');
+        hint.textContent = '';
+        loadNotes();
+      } else {
+        input.classList.add('error');
+        hint.textContent = '密码错误，请重试';
+        input.value = '';
+        __CRYPTO_KEY__ = null;
+        setTimeout(() => input.classList.remove('error'), 500);
+      }
+    }
+  } catch(e) {
+    hint.textContent = '加密初始化失败：' + e.message;
+  }
+}
 
 // ===== Supabase API =====
 async function supaFetch(path, options = {}) {
@@ -735,12 +442,42 @@ async function supaFetch(path, options = {}) {
   return resp;
 }
 
-// 从 Supabase 拉取所有笔记
+// 检测字段是否已加密（加密后是 base64，长度较长且不含中文）
+function looksEncrypted(str) {
+  if (!str || str.length < 20) return false;
+  return /^[A-Za-z0-9+/=]+$/.test(str);
+}
+
 async function loadNotes() {
   try {
     const resp = await supaFetch('notes?order=created_at.desc');
     if (!resp.ok) throw new Error('拉取失败');
-    __NOTES__ = await resp.json();
+    const raw = await resp.json();
+
+    // 检测是否有未加密的旧数据需要迁移
+    const needsMigration = raw.some(n => n.title && !looksEncrypted(n.title));
+    if (needsMigration) {
+      showSyncStatus('正在加密迁移旧数据...', 'success');
+      for (const n of raw) {
+        if (n.title && !looksEncrypted(n.title)) {
+          const encrypted = await encryptNote({
+            title: n.title, summary: n.summary || '', content: n.content || '',
+            link: n.link || '', source: n.source || '', tags: n.tags || []
+          });
+          await supaFetch(`notes?id=eq.${n.id}`, {
+            method: 'PATCH',
+            body: JSON.stringify(encrypted)
+          });
+        }
+      }
+      showSyncStatus('旧数据加密迁移完成！', 'success');
+      // 重新拉取已加密的数据
+      const resp2 = await supaFetch('notes?order=created_at.desc');
+      const raw2 = await resp2.json();
+      __NOTES__ = await Promise.all(raw2.map(n => decryptNote(n)));
+    } else {
+      __NOTES__ = await Promise.all(raw.map(n => decryptNote(n)));
+    }
     render();
   } catch(e) {
     console.log('拉取笔记失败:', e);
@@ -748,222 +485,129 @@ async function loadNotes() {
   }
 }
 
-// 新增笔记到 Supabase
 async function insertNote(note) {
+  const encrypted = await encryptNote(note);
   const resp = await supaFetch('notes', {
     method: 'POST',
     headers: { 'Prefer': 'return=representation' },
-    body: JSON.stringify(note)
+    body: JSON.stringify(encrypted)
   });
   if (!resp.ok) throw new Error('保存失败');
-  return (await resp.json())[0];
+  const saved = (await resp.json())[0];
+  return await decryptNote(saved);
 }
 
-// 从 Supabase 删除笔记
 async function removeNote(noteId) {
-  const resp = await supaFetch(`notes?id=eq.${noteId}`, {
-    method: 'DELETE'
-  });
+  const resp = await supaFetch(`notes?id=eq.${noteId}`, { method: 'DELETE' });
   if (!resp.ok) throw new Error('删除失败');
 }
 
-// 更新 Supabase 中的笔记
-async function updateNote(noteId, data) {
+async function updateNoteApi(noteId, data) {
+  const encrypted = await encryptNote(data);
   const resp = await supaFetch(`notes?id=eq.${noteId}`, {
     method: 'PATCH',
     headers: { 'Prefer': 'return=representation' },
-    body: JSON.stringify(data)
+    body: JSON.stringify(encrypted)
   });
   if (!resp.ok) throw new Error('更新失败');
-  return (await resp.json())[0];
+  const updated = (await resp.json())[0];
+  return await decryptNote(updated);
 }
 
 // ===== 工具函数 =====
 function formatDate(dateStr) {
-  const d = new Date(dateStr);
-  const now = new Date();
-  const diff = now - d;
-  const days = Math.floor(diff / 86400000);
-
-  if (days === 0) return '今天';
-  if (days === 1) return '昨天';
-  if (days < 7) return `${days} 天前`;
-  if (days < 30) return `${Math.floor(days / 7)} 周前`;
-
-  const y = d.getFullYear();
-  const m = String(d.getMonth() + 1).padStart(2, '0');
-  const day = String(d.getDate()).padStart(2, '0');
-  return `${y}-${m}-${day}`;
+  const d = new Date(dateStr); const now = new Date(); const diff = now - d; const days = Math.floor(diff / 86400000);
+  if (days === 0) return '今天'; if (days === 1) return '昨天'; if (days < 7) return `${days} 天前`; if (days < 30) return `${Math.floor(days / 7)} 周前`;
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
 }
-
 function formatDateGroup(dateStr) {
-  const d = new Date(dateStr);
-  const y = d.getFullYear();
-  const m = String(d.getMonth() + 1).padStart(2, '0');
-  const day = String(d.getDate()).padStart(2, '0');
-  const weekdays = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
-  return `${y}年${m}月${day}日 ${weekdays[d.getDay()]}`;
+  const d = new Date(dateStr); const weekdays = ['周日','周一','周二','周三','周四','周五','周六'];
+  return `${d.getFullYear()}年${String(d.getMonth()+1).padStart(2,'0')}月${String(d.getDate()).padStart(2,'0')}日 ${weekdays[d.getDay()]}`;
 }
-
-function escapeHtml(str) {
-  const div = document.createElement('div');
-  div.textContent = str;
-  return div.innerHTML;
-}
-
-// 简易 Markdown 渲染：换行 + **加粗** + ## 标题
+function escapeHtml(str) { const div = document.createElement('div'); div.textContent = str; return div.innerHTML; }
 function renderContent(str) {
   if (!str) return '';
-  return escapeHtml(str)
-    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-    .replace(/^## (.+)$/gm, '<div style="font-weight:700;font-size:15px;margin:12px 0 6px;color:var(--text)">$1</div>')
-    .replace(/\n/g, '<br>');
+  return escapeHtml(str).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>').replace(/^## (.+)$/gm, '<div style="font-weight:700;font-size:15px;margin:12px 0 6px;color:var(--text)">$1</div>').replace(/\n/g, '<br>');
 }
-
-function getAllNotes() {
-  return __NOTES__;
-}
-
+function getAllNotes() { return __NOTES__; }
 function getFilteredNotes() {
   let notes = getAllNotes();
-
-  if (activeCategory !== '全部') {
-    notes = notes.filter(n => n.category === activeCategory);
-  }
-
-  if (activeTag) {
-    notes = notes.filter(n => n.tags && n.tags.includes(activeTag));
-  }
-
+  if (activeCategory !== '全部') notes = notes.filter(n => n.category === activeCategory);
+  if (activeTag) notes = notes.filter(n => n.tags && n.tags.includes(activeTag));
   const query = document.getElementById('searchInput').value.trim().toLowerCase();
   if (query) {
     notes = notes.filter(n => {
-      const searchStr = [
-        n.title || '',
-        n.summary || '',
-        n.content || '',
-        (n.tags || []).join(' '),
-        n.source || '',
-        n.category || ''
-      ].join(' ').toLowerCase();
-      return searchStr.includes(query);
+      return [n.title||'', n.summary||'', n.content||'', (n.tags||[]).join(' '), n.source||'', n.category||''].join(' ').toLowerCase().includes(query);
     });
   }
-
   return notes.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
 }
-
 function getAllTags() {
-  const tagCount = {};
-  getAllNotes().forEach(n => {
-    (n.tags || []).forEach(t => {
-      tagCount[t] = (tagCount[t] || 0) + 1;
-    });
-  });
-  return Object.entries(tagCount).sort((a, b) => b[1] - a[1]);
+  const tc = {}; getAllNotes().forEach(n => (n.tags||[]).forEach(t => tc[t] = (tc[t]||0)+1));
+  return Object.entries(tc).sort((a,b) => b[1]-a[1]);
 }
-
 function getCategoryCounts() {
-  const all = getAllNotes();
-  const counts = { '全部': all.length };
-  CATEGORIES.forEach(cat => {
-    counts[cat] = all.filter(n => n.category === cat).length;
-  });
-  return counts;
+  const all = getAllNotes(); const c = {'全部': all.length};
+  CATEGORIES.forEach(cat => c[cat] = all.filter(n => n.category === cat).length);
+  return c;
 }
 
 // ===== 渲染 =====
 function render() {
-  const notes = getFilteredNotes();
-  const categoryCounts = getCategoryCounts();
-  const allTags = getAllTags();
-
+  const notes = getFilteredNotes(); const categoryCounts = getCategoryCounts(); const allTags = getAllTags();
   document.getElementById('totalCount').textContent = notes.length;
 
-  // 分类Tab
-  const catTabs = document.getElementById('categoryTabs');
-  catTabs.innerHTML = ['全部', ...CATEGORIES].map(cat => {
-    const count = categoryCounts[cat] || 0;
-    const activeCls = activeCategory === cat ? ' active' : '';
-    return `<span class="category-tab${activeCls}" onclick="selectCategory('${cat.replace(/'/g, "\\'")}')">
-      ${cat}<span class="badge">${count}</span>
-    </span>`;
+  document.getElementById('categoryTabs').innerHTML = ['全部', ...CATEGORIES].map(cat => {
+    const count = categoryCounts[cat] || 0; const ac = activeCategory === cat ? ' active' : '';
+    return `<span class="category-tab${ac}" onclick="selectCategory('${cat.replace(/'/g,"\\'")}')"> ${cat}<span class="badge">${count}</span></span>`;
   }).join('');
 
-  // 标签云
   const tagCloud = document.getElementById('tagCloud');
   if (allTags.length > 0) {
     tagCloud.innerHTML = allTags.map(([tag, count]) => {
-      const activeCls = activeTag === tag ? ' active' : '';
-      return `<span class="tag-chip${activeCls}" onclick="selectTag('${tag.replace(/'/g, "\\'")}')">
-        #${tag} <span style="opacity:0.6">${count}</span>
-      </span>`;
+      const ac = activeTag === tag ? ' active' : '';
+      return `<span class="tag-chip${ac}" onclick="selectTag('${tag.replace(/'/g,"\\'")}')"> #${tag} <span style="opacity:0.6">${count}</span></span>`;
     }).join('');
     tagCloud.style.display = 'flex';
-  } else {
-    tagCloud.style.display = 'none';
-  }
+  } else { tagCloud.style.display = 'none'; }
 
-  // 结果提示
   const hint = document.getElementById('resultHint');
-  hint.textContent = notes.length === 0
-    ? '没有找到匹配的笔记，试试换个关键词或分类'
-    : `共 ${notes.length} 条笔记`;
+  hint.textContent = notes.length === 0 ? '没有找到匹配的笔记，试试换个关键词或分类' : `共 ${notes.length} 条笔记`;
 
-  // 卡片区
   const cardArea = document.getElementById('cardArea');
+  if (notes.length === 0) { cardArea.innerHTML = `<div class="empty-state"><div class="icon">📭</div><p>这里还没有笔记</p><p style="font-size:13px;margin-top:4px;">点击右下角 + 开始添加</p></div>`; return; }
 
-  if (notes.length === 0) {
-    cardArea.innerHTML = `
-      <div class="empty-state">
-        <div class="icon">📭</div>
-        <p>这里还没有笔记</p>
-        <p style="font-size:13px;margin-top:4px;">点击右下角 + 开始添加</p>
-      </div>`;
-    return;
-  }
-
-  // 按日期分组
   const groups = {};
-  notes.forEach(n => {
-    const dateKey = n.created_at ? n.created_at.split('T')[0] : 'unknown';
-    if (!groups[dateKey]) groups[dateKey] = [];
-    groups[dateKey].push(n);
-  });
+  notes.forEach(n => { const dk = n.created_at ? n.created_at.split('T')[0] : 'unknown'; if (!groups[dk]) groups[dk] = []; groups[dk].push(n); });
 
   cardArea.innerHTML = Object.entries(groups).map(([dateKey, groupNotes]) => {
     const cards = groupNotes.map(n => {
-      const tagsHtml = (n.tags || []).map(t =>
-        `<span class="card-tag" onclick="event.stopPropagation();selectTag('${t.replace(/'/g, "\\'")}')">#${t}</span>`
-      ).join('');
-
+      const tagsHtml = (n.tags||[]).map(t => `<span class="card-tag" onclick="event.stopPropagation();selectTag('${t.replace(/'/g,"\\'")}')">#${t}</span>`).join('');
       const isMemo = !n.link;
-
       if (isMemo) {
         const contentHtml = n.content ? `<div class="card-content">${renderContent(n.content)}</div>` : '';
         const copyId = 'copy-' + (n.id || Math.random().toString(36).slice(2));
-        const editBtn = `<button class="card-edit-btn" onclick="event.stopPropagation();openEditNote('${(n.id || '').replace(/'/g, "\\'")}')">编辑</button>`;
-        const deleteBtn = `<button class="card-delete-btn" onclick="event.stopPropagation();deleteNote('${(n.id || '').replace(/'/g, "\\'")}')">删除</button>`;
+        const editBtn = `<button class="card-edit-btn" onclick="event.stopPropagation();openEditNote('${(n.id||'').replace(/'/g,"\\'")}')">编辑</button>`;
+        const deleteBtn = `<button class="card-delete-btn" onclick="event.stopPropagation();deleteNote('${(n.id||'').replace(/'/g,"\\'")}')">删除</button>`;
         return `<div class="card card-memo" onclick="toggleMemo(this)">
-          <button class="card-copy-btn" id="${copyId}" onclick="event.stopPropagation();copyNote(this, '${(n.id || '').replace(/'/g, "\\'")}')" title="复制全文">复制</button>
+          <button class="card-copy-btn" id="${copyId}" onclick="event.stopPropagation();copyNote(this,'${(n.id||'').replace(/'/g,"\\'")}')" title="复制全文">复制</button>
           <span class="card-memo-icon">▼</span>
-          <div class="card-title">${escapeHtml(n.title || '无标题')}</div>
-          <div class="card-summary">${escapeHtml(n.summary || '暂无摘要')}</div>
+          <div class="card-title">${escapeHtml(n.title||'无标题')}</div>
+          <div class="card-summary">${escapeHtml(n.summary||'暂无摘要')}</div>
           ${contentHtml}
           <div class="card-meta">
             ${n.source ? `<span class="card-source">${escapeHtml(n.source)}</span>` : ''}
             <span class="card-date">${formatDate(n.created_at)}</span>
             <div class="card-tags">${tagsHtml}</div>
           </div>
-          ${editBtn}
-          ${deleteBtn}
+          ${editBtn}${deleteBtn}
         </div>`;
       } else {
         return `<div class="card card-link" onclick="window.open('${n.link}','_blank')">
           <span class="card-external-icon">↗</span>
-          <button class="card-edit-btn card-link-edit" onclick="event.stopPropagation();openEditNote('${(n.id || '').replace(/'/g, "\\'")}')">编辑</button>
-          <div class="card-title">${escapeHtml(n.title || '无标题')}</div>
-          <div class="card-summary">${escapeHtml(n.summary || '暂无摘要')}</div>
+          <button class="card-edit-btn card-link-edit" onclick="event.stopPropagation();openEditNote('${(n.id||'').replace(/'/g,"\\'")}')">编辑</button>
+          <div class="card-title">${escapeHtml(n.title||'无标题')}</div>
+          <div class="card-summary">${escapeHtml(n.summary||'暂无摘要')}</div>
           <div class="card-meta">
             ${n.source ? `<span class="card-source">${escapeHtml(n.source)}</span>` : ''}
             <span class="card-date">${formatDate(n.created_at)}</span>
@@ -972,209 +616,107 @@ function render() {
         </div>`;
       }
     }).join('');
-
-    return `<div class="date-group">
-      <div class="date-label">${formatDateGroup(dateKey)}</div>
-      <div class="card-flow">${cards}</div>
-    </div>`;
+    return `<div class="date-group"><div class="date-label">${formatDateGroup(dateKey)}</div><div class="card-flow">${cards}</div></div>`;
   }).join('');
 }
 
 // ===== 交互 =====
 function toggleMemo(el) { el.classList.toggle('expanded'); }
-
 function copyNote(btn, noteId) {
-  const note = __NOTES__.find(n => n.id === noteId);
-  if (!note) return;
-
-  let text = note.title + '\n\n';
-  if (note.summary) text += note.summary + '\n\n';
-  if (note.content) text += note.content;
-  if (note.link) text += '\n\n链接：' + note.link;
-
-  navigator.clipboard.writeText(text.trim()).then(() => {
-    btn.textContent = '已复制';
-    btn.classList.add('copied');
-    setTimeout(() => { btn.textContent = '复制'; btn.classList.remove('copied'); }, 1500);
-  }).catch(() => {
-    const ta = document.createElement('textarea');
-    ta.value = text.trim();
-    ta.style.position = 'fixed';
-    ta.style.opacity = '0';
-    document.body.appendChild(ta);
-    ta.select();
-    document.execCommand('copy');
-    document.body.removeChild(ta);
-    btn.textContent = '已复制';
-    btn.classList.add('copied');
-    setTimeout(() => { btn.textContent = '复制'; btn.classList.remove('copied'); }, 1500);
+  const note = __NOTES__.find(n => n.id === noteId); if (!note) return;
+  let text = note.title + '\n\n'; if (note.summary) text += note.summary + '\n\n'; if (note.content) text += note.content; if (note.link) text += '\n\n链接：' + note.link;
+  navigator.clipboard.writeText(text.trim()).then(() => { btn.textContent = '已复制'; btn.classList.add('copied'); setTimeout(() => { btn.textContent = '复制'; btn.classList.remove('copied'); }, 1500); }).catch(() => {
+    const ta = document.createElement('textarea'); ta.value = text.trim(); ta.style.position = 'fixed'; ta.style.opacity = '0'; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+    btn.textContent = '已复制'; btn.classList.add('copied'); setTimeout(() => { btn.textContent = '复制'; btn.classList.remove('copied'); }, 1500);
   });
 }
+function selectCategory(cat) { activeCategory = cat; activeTag = null; document.getElementById('searchInput').value = ''; render(); }
+function selectTag(tag) { if (activeTag === tag) activeTag = null; else { activeTag = tag; activeCategory = '全部'; } document.getElementById('searchInput').value = ''; render(); }
 
-function selectCategory(cat) {
-  activeCategory = cat;
-  activeTag = null;
-  document.getElementById('searchInput').value = '';
-  render();
-}
-
-function selectTag(tag) {
-  if (activeTag === tag) {
-    activeTag = null;
-  } else {
-    activeTag = tag;
-    activeCategory = '全部';
-  }
-  document.getElementById('searchInput').value = '';
-  render();
-}
-
-// ===== 键盘快捷键 =====
 document.addEventListener('keydown', e => {
-  if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
-    e.preventDefault();
-    document.getElementById('searchInput').focus();
-  }
-  if (e.key === 'Escape') {
-    activeCategory = '全部';
-    activeTag = null;
-    document.getElementById('searchInput').value = '';
-    render();
-  }
+  if ((e.metaKey||e.ctrlKey) && e.key === 'k') { e.preventDefault(); document.getElementById('searchInput').focus(); }
+  if (e.key === 'Escape') { activeCategory = '全部'; activeTag = null; document.getElementById('searchInput').value = ''; render(); }
 });
 
-// ===== 新建笔记 =====
+// ===== 新建/编辑笔记 =====
 function openNewNote() {
   __EDITING_ID__ = null;
   document.getElementById('modalTitle').textContent = '新建笔记';
-  document.getElementById('noteTitle').value = '';
-  document.getElementById('noteLink').value = '';
-  document.getElementById('noteSource').value = '';
-  document.getElementById('noteTags').value = '';
-  document.getElementById('noteSummary').value = '';
-  document.getElementById('noteContent').value = '';
-
-  const sel = document.getElementById('noteCategory');
-  sel.innerHTML = CATEGORIES.map(c => `<option value="${c}">${c}</option>`).join('');
-
+  document.getElementById('noteTitle').value = ''; document.getElementById('noteLink').value = '';
+  document.getElementById('noteSource').value = ''; document.getElementById('noteTags').value = '';
+  document.getElementById('noteSummary').value = ''; document.getElementById('noteContent').value = '';
+  document.getElementById('noteCategory').innerHTML = CATEGORIES.map(c => `<option value="${c}">${c}</option>`).join('');
   document.getElementById('modalOverlay').classList.add('show');
   setTimeout(() => document.getElementById('noteTitle').focus(), 200);
 }
-
 function openEditNote(noteId) {
-  const note = __NOTES__.find(n => n.id === noteId);
-  if (!note) return;
-
+  const note = __NOTES__.find(n => n.id === noteId); if (!note) return;
   __EDITING_ID__ = noteId;
   document.getElementById('modalTitle').textContent = '编辑笔记';
-
-  const sel = document.getElementById('noteCategory');
-  sel.innerHTML = CATEGORIES.map(c => `<option value="${c}"${c === note.category ? ' selected' : ''}>${c}</option>`).join('');
-
-  document.getElementById('noteTitle').value = note.title || '';
-  document.getElementById('noteLink').value = note.link || '';
-  document.getElementById('noteSource').value = note.source || '';
-  document.getElementById('noteTags').value = (note.tags || []).join(', ');
-  document.getElementById('noteSummary').value = note.summary || '';
-  document.getElementById('noteContent').value = note.content || '';
-
+  document.getElementById('noteCategory').innerHTML = CATEGORIES.map(c => `<option value="${c}"${c===note.category?' selected':''}>${c}</option>`).join('');
+  document.getElementById('noteTitle').value = note.title||''; document.getElementById('noteLink').value = note.link||'';
+  document.getElementById('noteSource').value = note.source||''; document.getElementById('noteTags').value = (note.tags||[]).join(', ');
+  document.getElementById('noteSummary').value = note.summary||''; document.getElementById('noteContent').value = note.content||'';
   document.getElementById('modalOverlay').classList.add('show');
   setTimeout(() => document.getElementById('noteTitle').focus(), 200);
 }
-
-function closeModal() {
-  document.getElementById('modalOverlay').classList.remove('show');
-}
+function closeModal() { document.getElementById('modalOverlay').classList.remove('show'); }
 
 async function saveNote() {
   const title = document.getElementById('noteTitle').value.trim();
   if (!title) { document.getElementById('noteTitle').style.borderColor='#c55'; return; }
-
   const link = document.getElementById('noteLink').value.trim();
   const category = document.getElementById('noteCategory').value;
   const source = document.getElementById('noteSource').value.trim();
   const tagsStr = document.getElementById('noteTags').value.trim();
   const summary = document.getElementById('noteSummary').value.trim();
   const content = document.getElementById('noteContent').value.trim();
-
   const tags = tagsStr ? tagsStr.split(/[,，]/).map(t => t.trim()).filter(Boolean) : [];
 
   closeModal();
-  showSyncStatus('正在保存...');
+  showSyncStatus('正在加密并保存...');
 
   try {
     if (__EDITING_ID__) {
-      // 编辑模式
-      const data = { title, category, tags, summary: summary || '', source: source || '', link: link || null, content: content || '' };
-      const updated = await updateNote(__EDITING_ID__, data);
+      const data = { title, category, tags, summary: summary||'', source: source||'', link: link||null, content: content||'' };
+      const updated = await updateNoteApi(__EDITING_ID__, data);
       const idx = __NOTES__.findIndex(n => n.id === __EDITING_ID__);
       if (idx >= 0) __NOTES__[idx] = updated;
       __EDITING_ID__ = null;
       render();
-      showSyncStatus('修改已保存！', 'success');
+      showSyncStatus('修改已加密保存！', 'success');
     } else {
-      // 新建模式
-      const note = {
-        id: 'n' + Date.now().toString(36),
-        title, category, tags,
-        summary: summary || '',
-        source: source || '',
-        created_at: new Date().toISOString()
-      };
-      if (link) note.link = link;
-      if (content) note.content = content;
-
+      const note = { id: 'n' + Date.now().toString(36), title, category, tags, summary: summary||'', source: source||'', created_at: new Date().toISOString() };
+      if (link) note.link = link; if (content) note.content = content;
       const saved = await insertNote(note);
       __NOTES__.unshift(saved);
       render();
-      showSyncStatus('保存成功！', 'success');
+      showSyncStatus('已加密保存！', 'success');
     }
-  } catch(e) {
-    console.log('保存失败:', e);
-    showSyncStatus('保存失败，请检查网络后重试', 'warn');
-  }
+  } catch(e) { console.log('保存失败:', e); showSyncStatus('保存失败，请检查网络后重试', 'warn'); }
 }
 
 async function deleteNote(noteId) {
   if (!confirm('确定删除这条笔记？')) return;
-
   showSyncStatus('正在删除...');
-  try {
-    await removeNote(noteId);
-    __NOTES__ = __NOTES__.filter(n => n.id !== noteId);
-    render();
-    showSyncStatus('删除成功', 'success');
-  } catch(e) {
-    showSyncStatus('删除失败，请稍后重试', 'warn');
-  }
+  try { await removeNote(noteId); __NOTES__ = __NOTES__.filter(n => n.id !== noteId); render(); showSyncStatus('删除成功', 'success'); }
+  catch(e) { showSyncStatus('删除失败，请稍后重试', 'warn'); }
 }
 
-// ===== 状态提示 =====
 function showSyncStatus(msg, type) {
   let el = document.getElementById('syncStatus');
-  if (!el) {
-    el = document.createElement('div');
-    el.id = 'syncStatus';
-    document.body.appendChild(el);
-  }
-  el.textContent = msg;
-  el.className = 'sync-status';
-  if (type) el.classList.add(type);
-  el.style.display = 'block';
-  clearTimeout(el._timer);
-  el._timer = setTimeout(() => { el.style.display = 'none'; }, 3000);
+  if (!el) { el = document.createElement('div'); el.id = 'syncStatus'; document.body.appendChild(el); }
+  el.textContent = msg; el.className = 'sync-status'; if (type) el.classList.add(type);
+  el.style.display = 'block'; clearTimeout(el._timer); el._timer = setTimeout(() => el.style.display = 'none', 3000);
 }
 
 // ===== 初始化 =====
-loadNotes();
+initLockScreen();
 
 // ===== PWA Service Worker =====
 if ('serviceWorker' in navigator) {
-  // 清理所有旧缓存和旧 SW
   caches.keys().then(keys => keys.forEach(k => caches.delete(k)));
-  navigator.serviceWorker.getRegistrations().then(regs => {
-    regs.forEach(r => r.unregister());
-  });
+  navigator.serviceWorker.getRegistrations().then(regs => regs.forEach(r => r.unregister()));
 }
 </script>
 </body>

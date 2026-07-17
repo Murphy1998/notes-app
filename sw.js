@@ -1,49 +1,29 @@
-const CACHE_NAME = 'my-notes-v3';
-const ASSETS = [
-  './',
-  './index.html',
-  './manifest.json',
-  './icons/icon-192x192.png',
-  './icons/icon-512x512.png',
-  './icons/apple-touch-icon.png'
-];
+// v4: E2E encryption version - force cache update
+const CACHE_NAME = 'my-notes-v4';
 
-// 安装：预缓存核心资源，立即接管
 self.addEventListener('install', event => {
-  event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => cache.addAll(ASSETS))
-      .then(() => self.skipWaiting())
-  );
+  self.skipWaiting();
 });
 
-// 激活：清理所有旧缓存
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys().then(keys =>
-      Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))
+      Promise.all(keys.map(k => caches.delete(k)))
     ).then(() => self.clients.claim())
   );
 });
 
-// 请求拦截：网络优先，离线回退缓存
+// Network-first: always try network, fall back to cache
 self.addEventListener('fetch', event => {
-  // GitHub API 请求不缓存
-  if (event.request.url.includes('api.github.com')) {
-    return;
-  }
-
   event.respondWith(
-    fetch(event.request).then(response => {
-      // 网络成功，更新缓存
-      if (response && response.status === 200) {
-        const clone = response.clone();
-        caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
-      }
-      return response;
-    }).catch(() => {
-      // 网络失败，回退到缓存
-      return caches.match(event.request);
-    })
+    fetch(event.request)
+      .then(response => {
+        if (response && response.status === 200) {
+          const clone = response.clone();
+          caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
+        }
+        return response;
+      })
+      .catch(() => caches.match(event.request))
   );
 });
