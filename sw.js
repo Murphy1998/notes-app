@@ -1,5 +1,5 @@
-// v4: E2E encryption version - force cache update
-const CACHE_NAME = 'my-notes-v4';
+// v5: re-enable SW registration with network-first strategy
+const CACHE_NAME = 'my-notes-v5';
 
 self.addEventListener('install', event => {
   self.skipWaiting();

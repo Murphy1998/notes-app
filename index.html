@@ -179,9 +179,14 @@
     <div class="lock-subtitle" id="lockSubtitle">所有笔记内容将在浏览器端加密后存储<br>即使数据库泄露，他人也无法读取</div>
     <input class="lock-input" id="lockInput" type="password" maxlength="32" placeholder="输入密码" autofocus
       onkeydown="if(event.key==='Enter')handleLock()">
+    <input class="lock-input" id="lockInput2" type="password" maxlength="32" placeholder="再次输入密码" style="display:none;margin-top:10px;"
+      onkeydown="if(event.key==='Enter')handleLock()">
     <div class="lock-hint" id="lockHint"></div>
     <button class="lock-btn" id="lockBtn" onclick="handleLock()">确认</button>
     <div class="lock-encrypt-badge">🔒 端到端加密 · 数据仅你可见</div>
+    <div id="lockReset" style="display:none;margin-top:16px;font-size:12px;">
+      <a href="#" onclick="resetLocalState(event)" style="color:var(--text-muted);text-decoration:underline;">状态异常？清除本机缓存重新同步</a>
+    </div>
   </div>
 </div>
 
@@ -258,10 +263,13 @@
 // ===== 配置 =====
 const SUPABASE_URL = 'https://ocdsrpjkmfnoupasmqkt.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_nbfWiQMdvMIXWwwtCYt0nQ_SPxE-wP5';
+const FALLBACK_DATA = {"meta": {"version": "1.0", "created_at": "2026-07-16", "description": "个人笔记收藏夹 - 按分类整理的文章、链接及关键纪要"}, "categories": ["AI与机器学习", "编程技术", "产品与设计", "效率工具", "阅读与思考", "其他"], "notes": [{"id": "n001", "title": "Codex使用教程", "link": "https://mp.weixin.qq.com/s/SJco8KqYUJT3DjMdrMu_Iw", "category": "AI与机器学习", "tags": ["OpenAI", "Codex", "AI编程", "教程"], "summary": "OpenAI Codex 的使用教程，涵盖 Codex 的核心能力、API 调用方式、代码生成与补全实践，帮助开发者快速上手 AI 辅助编程。", "source": "微信公众号", "created_at": "2026-07-16T00:00:00+08:00"}, {"id": "n002", "title": "从0到1带你速通Codex，我整理的终极保姆教程来了", "link": "https://mp.weixin.qq.com/s/5kgVdLNABViv8uAnD0M6Ag", "category": "AI与机器学习", "tags": ["OpenAI", "Codex", "AI编程", "教程", "入门"], "summary": "从零到一的 Codex 速通教程，保姆级步骤详解，帮助新手快速掌握 Codex 的核心用法和最佳实践。", "source": "微信公众号", "created_at": "2026-07-16T00:00:00+08:00"}, {"id": "n003", "title": "从零开始：用 AI 开发笔记应用并部署到 iPhone", "category": "效率工具", "tags": ["PWA", "iOS", "教程", "笔记工具", "GitHub Pages", "CatPaw"], "summary": "完整记录了如何用 AI 工具从 0 到 1 开发一个 flomo 风格的笔记网页应用，部署到 GitHub Pages，最后变成 iPhone 上的独立 App。零代码基础也能照做。", "content": "一、用 AI 开发笔记网页应用\n\n工具：CatPaw（美团内部 AI 助手）\nPrompt 示例：「帮我开发一个笔记整理小工具，我每次会将笔记发给你，你分门别类放进去，放进链接及关键纪要总结」\n\nAI 会自动完成以下工作：\n· 设计数据结构（database.json）：每条笔记包含标题、链接、分类、标签、摘要、来源、时间\n· 设计分类体系：AI与机器学习 / 编程技术 / 产品与设计 / 效率工具 / 阅读与思考 / 其他\n· 生成可视化界面（viewer.html）：flomo 风格的卡片流布局，支持搜索、分类筛选、标签导航\n· 区分两种笔记类型：链接型（点击跳转原文）和备忘型（点击展开/收起详情）\n\n后续添加笔记只需发消息，例如：\n「新增笔记：React 19 新特性 https://xxx.com」\nAI 自动识别内容 → 归类 → 生成摘要 → 打标签 → 更新页面\n\n二、部署到线上（GitHub Pages）\n\n1. 注册 GitHub 账号：github.com\n2. 创建新仓库：点右上角 + → New repository → 仓库名填 notes-app → 选 Public → 不勾选 README → Create\n3. 推送代码：让 AI 帮你执行 git init / git add / git commit / git push（需要生成 Personal Access Token）\n4. 启用 Pages：进入仓库 → Settings → Pages → Source 选 Deploy from a branch → Branch 选 main，路径选 / (root) → Save\n5. 等待 1-2 分钟，访问 https://你的用户名.github.io/notes-app/ 即可看到页面\n\n生成 Token 的方法：\n· 打开 github.com/settings/tokens → Generate new token (classic)\n· 勾选 repo 权限 → Generate token → 复制 token 给 AI 用于推送\n\n三、将网页变成 iPhone 独立 App（PWA）\n\nAI 会自动改造页面为 PWA（渐进式 Web 应用），添加以下文件：\n· manifest.json：App 名称、图标、主题色等配置\n· sw.js：离线缓存，无网络也能查看已加载的笔记\n· 多尺寸图标：自动生成 72px ~ 512px 的 App 图标\n\n在 iPhone 上安装：\n1. 用 Safari 打开你的 GitHub Pages 链接\n2. 点底部中间的「分享」按钮（方框 + 向上箭头图标）\n3. 往下滑找到「添加到主屏幕」\n4. 点「添加」\n\n完成后主屏幕出现绿色笔记本图标，点开就是全屏独立 App，没有浏览器地址栏，体验接近原生应用。\n\n注意事项：\n· 必须用 Safari，Chrome 不支持 iOS 上的 PWA 安装\n· 页面必须通过 HTTPS 访问（GitHub Pages 默认支持）\n· 离线模式下只能查看已缓存的笔记，新内容需联网刷新", "source": "自整理", "created_at": "2026-07-16T00:00:00+08:00"}, {"id": "n004", "title": "AGENT规矩-卡帕西：减少LLM编码错误的行为准则", "category": "AI与机器学习", "tags": ["AI编程", "LLM", "编程规范", "Karpathy", "最佳实践"], "summary": "Andrej Karpathy 整理的减少常见 LLM 编码错误的行为准则，涵盖基础规则、调试规则和架构规则三大类，帮助开发者在 AI 辅助编程中避免常见陷阱。", "content": "减少常见LLM编码错误的行为准则\n可根据需要与项目特定指令合并。\n\n权衡：这些准则倾向于谨慎而非速度。它们的设计目标是减少你引入的微妙 bug、回归问题和\"快速但错误\"的修复。\n\n## 基础规则\n\n- 在做修改之前先阅读整个文件或相关上下文。不要对格式、结构或逻辑做假设。每个文件都有自己的约定。\n- 修改现有文件时，匹配其现有风格——即使它与你通常的偏好不同。\n- 永远不要假设变量、函数或导入的存在。检查实际的代码库。\n- 绝不发明函数签名、参数或行为。验证后再使用。\n- 修复时只修改出问题的地方。不要重新格式化周围的代码，不要重命名内容，也不要「顺手改进」。\n- 必须给出合理解释后才建议安装新的依赖。偏向使用已有的依赖。\n- 保持版本与项目已经使用的一致，除非有明确的升级理由（和明确的迁移路径）。\n- 每次修改后检查是否有仍然引用旧路径、旧名称或已删除元素的代码。清理所有引用。\n- 不要留下 TODO 或占位符。要么完整实现，要么不做。\n- 删除所有不再使用的调试输出（console.log、print 等），除非是项目标准日志系统的一部分。\n\n## 调试规则\n\n- 先通过日志/检查来追踪实际执行流程，之后再修改代码。盲目修改是你的大敌。\n- 如果调试了超过2次仍未成功，退后一步。重新阅读所有相关代码，检查流程中是否有错误的假设。\n- 优先阅读实际的错误信息和堆栈跟踪，而不是猜测可能出了什么问题。\n- 如果某些东西\"不应该发生\"，验证你的假设——检查类型、控制流和数据。\n- 不要为了隐藏 bug 而添加 try/catch 或默认值。找到根本原因。\n\n## 架构规则\n\n- 不要创建新的抽象层（包装器、辅助函数、基类），除非有多个地方会用到。\n- 不要在现有结构旁边建立平行结构（例如第二个路由系统、另一层数据层）。要么使用现有的，要么替换它——但不要搞两套。\n- 将测试与实现代码一起更新。如果你修改了行为，也要修改测试。\n- 只要有可能就编写纯函数。将副作用推到边界处。\n- 修改公共 API 时，追踪所有调用者和使用处。更新或标记它们。", "source": "自整理", "created_at": "2026-07-16T12:00:00+08:00"}]};
 const CATEGORIES = ["AI与机器学习", "编程技术", "产品与设计", "效率工具", "阅读与思考", "其他"];
 const ENCRYPTED_FIELDS = ['title', 'summary', 'content', 'link', 'source']; // tags 单独处理
 const SALT_KEY = 'notes-e2e-salt';
 const VERIFY_KEY = 'notes-e2e-verify'; // 用于验证密码是否正确
+const LOCAL_CACHE_KEY = 'notes-local-cache-v2';
+const META_ID = '__meta__'; // 云端元数据行：存 salt + 密码验证标记，实现多设备解锁
 
 // ===== 状态 =====
 let __NOTES__ = [];
@@ -340,7 +348,9 @@ async function encryptNote(note) {
 async function decryptNote(note) {
   const decrypted = { ...note };
   for (const field of ENCRYPTED_FIELDS) {
-    if (decrypted[field]) decrypted[field] = await decryptStr(decrypted[field]);
+    if (decrypted[field] && typeof decrypted[field] === 'string' && looksEncrypted(decrypted[field])) {
+      decrypted[field] = await decryptStr(decrypted[field]);
+    }
   }
   // tags：从加密字段恢复
   if (decrypted.tags_encrypted) {
@@ -365,23 +375,78 @@ async function checkVerifyToken(token) {
 }
 
 // ===== 密码屏逻辑 =====
-function isFirstTime() {
-  return !localStorage.getItem(VERIFY_KEY);
+let __LOCK_MODE__ = 'unlock'; // 'setup' | 'unlock'
+let __BOOTED__ = false;       // 云端元数据拉取完成前禁止提交
+let __META__ = null;          // 云端元数据 { verifyToken, salt }
+
+// 从云端读取元数据行（salt + 密码验证标记）
+async function fetchMeta() {
+  try {
+    const resp = await supaFetch(`notes?id=eq.${META_ID}&select=id,title,summary`);
+    if (!resp.ok) return null;
+    const rows = await resp.json();
+    if (!rows.length) return null;
+    return { verifyToken: rows[0].title || '', salt: rows[0].summary || '' };
+  } catch(e) { return null; }
 }
 
-function initLockScreen() {
-  if (isFirstTime()) {
+// 把 salt + 验证标记写入云端（salt 不含密码信息，验证标记是密文，均可安全存储）
+async function saveMeta(verifyToken, saltHex) {
+  try {
+    const patch = await supaFetch(`notes?id=eq.${META_ID}`, {
+      method: 'PATCH',
+      headers: { 'Prefer': 'return=representation' },
+      body: JSON.stringify({ title: verifyToken, summary: saltHex })
+    });
+    if (patch.ok) {
+      const rows = await patch.json();
+      if (rows.length > 0) return true;
+    }
+    const post = await supaFetch('notes', {
+      method: 'POST',
+      body: JSON.stringify({ id: META_ID, title: verifyToken, summary: saltHex, category: '系统', tags: [], created_at: new Date().toISOString() })
+    });
+    return post.ok;
+  } catch(e) { return false; }
+}
+
+// 启动时确定进入"设置密码"还是"解锁"模式
+async function bootLockScreen() {
+  __META__ = await fetchMeta();
+  if (__META__ && __META__.verifyToken && __META__.salt) {
+    // 云端是权威来源：同步到本机（覆盖旧设备遗留的本地值）
+    localStorage.setItem(VERIFY_KEY, __META__.verifyToken);
+    localStorage.setItem(SALT_KEY, __META__.salt);
+    setLockMode('unlock');
+  } else if (localStorage.getItem(VERIFY_KEY) && localStorage.getItem(SALT_KEY)) {
+    setLockMode('unlock'); // 旧版本地状态，解锁成功后会自动补写到云端
+  } else {
+    setLockMode('setup');
+  }
+  __BOOTED__ = true;
+}
+
+function setLockMode(mode) {
+  __LOCK_MODE__ = mode;
+  const input2 = document.getElementById('lockInput2');
+  const resetLink = document.getElementById('lockReset');
+  if (mode === 'setup') {
     document.getElementById('lockIcon').textContent = '🔐';
     document.getElementById('lockTitle').textContent = '设置加密密码';
-    document.getElementById('lockSubtitle').innerHTML = '首次使用，请设置一个加密密码<br>所有笔记将在浏览器端加密后存储<br><strong style="color:var(--accent)">请牢记此密码，忘记将无法恢复数据</strong>';
+    document.getElementById('lockSubtitle').innerHTML = '首次使用，请设置一个加密密码<br>所有笔记将在浏览器端加密后存储，任意设备用同一密码即可解锁<br><strong style="color:var(--accent)">请牢记此密码，忘记将无法恢复数据</strong>';
     document.getElementById('lockBtn').textContent = '设置密码';
-    document.getElementById('lockInput').placeholder = '设置密码';
+    document.getElementById('lockInput').placeholder = '设置密码（至少 4 位）';
+    input2.style.display = 'block';
+    resetLink.style.display = 'none';
   } else {
     document.getElementById('lockIcon').textContent = '🔒';
     document.getElementById('lockTitle').textContent = '输入加密密码';
     document.getElementById('lockSubtitle').innerHTML = '请输入密码解密笔记';
     document.getElementById('lockBtn').textContent = '解锁';
     document.getElementById('lockInput').placeholder = '输入密码';
+    input2.style.display = 'none';
+    input2.value = '';
+    resetLink.style.display = 'block';
   }
 }
 
@@ -390,30 +455,45 @@ async function handleLock() {
   const hint = document.getElementById('lockHint');
   const pwd = input.value.trim();
 
-  if (!pwd || pwd.length < 1) {
-    hint.textContent = '请输入密码';
-    return;
-  }
+  if (!__BOOTED__) { hint.textContent = '正在连接云端，请稍候…'; return; }
+  if (!pwd) { hint.textContent = '请输入密码'; return; }
 
   try {
-    __CRYPTO_KEY__ = await deriveKey(pwd);
+    if (__LOCK_MODE__ === 'setup') {
+      // ---- 首次设置 ----
+      const pwd2 = document.getElementById('lockInput2').value.trim();
+      if (pwd.length < 4) { hint.textContent = '密码至少 4 位'; return; }
+      if (pwd !== pwd2) { hint.textContent = '两次输入的密码不一致'; return; }
 
-    if (isFirstTime()) {
-      // 首次设置：生成验证标记
+      // 生成新 salt 并派生密钥
+      const salt = crypto.getRandomValues(new Uint8Array(16));
+      const saltHex = Array.from(salt).map(b => b.toString(16).padStart(2, '0')).join('');
+      localStorage.setItem(SALT_KEY, saltHex);
+      __CRYPTO_KEY__ = await deriveKey(pwd);
+
       const token = await generateVerifyToken();
       localStorage.setItem(VERIFY_KEY, token);
-      // 同时存 salt 到 Supabase，方便换设备时恢复（salt 不含密码信息，安全）
+      const synced = await saveMeta(token, saltHex); // 上云，换设备才能解锁
+      __META__ = { verifyToken: token, salt: saltHex };
+
       document.getElementById('lockScreen').classList.add('hidden');
       hint.textContent = '';
-      showSyncStatus('加密密码已设置！', 'success');
+      showSyncStatus(synced ? '加密密码已设置，任意设备可用同一密码解锁！' : '密码已设置（云端同步失败，换设备前请联网重开一次）', synced ? 'success' : 'warn');
       loadNotes();
     } else {
-      // 验证密码
+      // ---- 解锁 ----
+      __CRYPTO_KEY__ = await deriveKey(pwd);
       const token = localStorage.getItem(VERIFY_KEY);
       const ok = await checkVerifyToken(token);
       if (ok) {
         document.getElementById('lockScreen').classList.add('hidden');
         hint.textContent = '';
+        // 旧版本升级：本地有密码但云端没有元数据行 → 补写，实现多设备同步
+        if (!__META__) {
+          saveMeta(token, localStorage.getItem(SALT_KEY)).then(synced => {
+            if (synced) __META__ = { verifyToken: token, salt: localStorage.getItem(SALT_KEY) };
+          });
+        }
         loadNotes();
       } else {
         input.classList.add('error');
@@ -426,6 +506,16 @@ async function handleLock() {
   } catch(e) {
     hint.textContent = '加密初始化失败：' + e.message;
   }
+}
+
+// 清除本机缓存（云端数据不受影响），用于本地状态损坏后重新同步
+function resetLocalState(e) {
+  if (e) e.preventDefault();
+  if (!confirm('将清除本设备上的加密缓存与离线数据（云端笔记不受影响），确定继续？')) return;
+  localStorage.removeItem(SALT_KEY);
+  localStorage.removeItem(VERIFY_KEY);
+  localStorage.removeItem(LOCAL_CACHE_KEY);
+  location.reload();
 }
 
 // ===== Supabase API =====
@@ -448,40 +538,80 @@ function looksEncrypted(str) {
   return /^[A-Za-z0-9+/=]+$/.test(str);
 }
 
+async function saveNotesToLocalCache(notes) {
+  try {
+    const payload = await Promise.all((notes || []).map(n => encryptNote(n)));
+    localStorage.setItem(LOCAL_CACHE_KEY, JSON.stringify(payload));
+  } catch (e) {
+    console.log('保存本地缓存失败:', e);
+  }
+}
+
+async function loadNotesFromLocalCache() {
+  try {
+    const raw = localStorage.getItem(LOCAL_CACHE_KEY);
+    if (!raw) return [];
+    const payload = JSON.parse(raw);
+    return await Promise.all(payload.map(n => decryptNote(n)));
+  } catch (e) {
+    return [];
+  }
+}
+
 async function loadNotes() {
   try {
     const resp = await supaFetch('notes?order=created_at.desc');
     if (!resp.ok) throw new Error('拉取失败');
-    const raw = await resp.json();
+    const rawAll = await resp.json();
+    const raw = rawAll.filter(n => n.id !== META_ID); // 排除加密元数据行
 
     // 检测是否有未加密的旧数据需要迁移
     const needsMigration = raw.some(n => n.title && !looksEncrypted(n.title));
     if (needsMigration) {
       showSyncStatus('正在加密迁移旧数据...', 'success');
+      let migrated = 0, failed = 0;
       for (const n of raw) {
         if (n.title && !looksEncrypted(n.title)) {
           const encrypted = await encryptNote({
             title: n.title, summary: n.summary || '', content: n.content || '',
             link: n.link || '', source: n.source || '', tags: n.tags || []
           });
-          await supaFetch(`notes?id=eq.${n.id}`, {
+          const r = await supaFetch(`notes?id=eq.${n.id}`, {
             method: 'PATCH',
             body: JSON.stringify(encrypted)
           });
+          if (r.ok) migrated++; else failed++;
         }
       }
-      showSyncStatus('旧数据加密迁移完成！', 'success');
+      if (failed > 0) {
+        showSyncStatus(`${failed} 条笔记加密迁移失败，请检查网络后刷新重试`, 'warn');
+      } else {
+        showSyncStatus(`旧数据加密迁移完成（${migrated} 条）！`, 'success');
+      }
       // 重新拉取已加密的数据
       const resp2 = await supaFetch('notes?order=created_at.desc');
-      const raw2 = await resp2.json();
+      const raw2 = (await resp2.json()).filter(n => n.id !== META_ID);
       __NOTES__ = await Promise.all(raw2.map(n => decryptNote(n)));
     } else {
       __NOTES__ = await Promise.all(raw.map(n => decryptNote(n)));
     }
+    await saveNotesToLocalCache(__NOTES__);
     render();
   } catch(e) {
     console.log('拉取笔记失败:', e);
-    showSyncStatus('加载失败，请检查网络', 'warn');
+    const cached = await loadNotesFromLocalCache();
+    if (cached.length > 0) {
+      __NOTES__ = cached;
+      render();
+      showSyncStatus('云端不可用，已切换到本地缓存', 'warn');
+    } else if (FALLBACK_DATA && Array.isArray(FALLBACK_DATA.notes)) {
+      __NOTES__ = FALLBACK_DATA.notes.map(note => ({ ...note, created_at: note.created_at || new Date().toISOString() }));
+      await saveNotesToLocalCache(__NOTES__);
+      render();
+      showSyncStatus('使用内置示例笔记', 'warn');
+    } else {
+      showSyncStatus('加载失败，请检查网络', 'warn');
+    }
   }
 }
 
@@ -521,7 +651,9 @@ function formatDate(dateStr) {
   return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
 }
 function formatDateGroup(dateStr) {
-  const d = new Date(dateStr); const weekdays = ['周日','周一','周二','周三','周四','周五','周六'];
+  const d = new Date(dateStr);
+  if (isNaN(d.getTime())) return '其他时间';
+  const weekdays = ['周日','周一','周二','周三','周四','周五','周六'];
   return `${d.getFullYear()}年${String(d.getMonth()+1).padStart(2,'0')}月${String(d.getDate()).padStart(2,'0')}日 ${weekdays[d.getDay()]}`;
 }
 function escapeHtml(str) { const div = document.createElement('div'); div.textContent = str; return div.innerHTML; }
@@ -566,7 +698,7 @@ function render() {
   if (allTags.length > 0) {
     tagCloud.innerHTML = allTags.map(([tag, count]) => {
       const ac = activeTag === tag ? ' active' : '';
-      return `<span class="tag-chip${ac}" onclick="selectTag('${tag.replace(/'/g,"\\'")}')"> #${tag} <span style="opacity:0.6">${count}</span></span>`;
+      return `<span class="tag-chip${ac}" onclick="selectTag(decodeURIComponent('${encodeURIComponent(tag)}'))"> #${escapeHtml(tag)} <span style="opacity:0.6">${count}</span></span>`;
     }).join('');
     tagCloud.style.display = 'flex';
   } else { tagCloud.style.display = 'none'; }
@@ -582,7 +714,7 @@ function render() {
 
   cardArea.innerHTML = Object.entries(groups).map(([dateKey, groupNotes]) => {
     const cards = groupNotes.map(n => {
-      const tagsHtml = (n.tags||[]).map(t => `<span class="card-tag" onclick="event.stopPropagation();selectTag('${t.replace(/'/g,"\\'")}')">#${t}</span>`).join('');
+      const tagsHtml = (n.tags||[]).map(t => `<span class="card-tag" onclick="event.stopPropagation();selectTag(decodeURIComponent('${encodeURIComponent(t)}'))">#${escapeHtml(t)}</span>`).join('');
       const isMemo = !n.link;
       if (isMemo) {
         const contentHtml = n.content ? `<div class="card-content">${renderContent(n.content)}</div>` : '';
@@ -603,7 +735,7 @@ function render() {
           ${editBtn}${deleteBtn}
         </div>`;
       } else {
-        return `<div class="card card-link" onclick="window.open('${n.link}','_blank')">
+        return `<div class="card card-link" onclick="openLink('${(n.id||'').replace(/'/g,"\\'")}')">
           <span class="card-external-icon">↗</span>
           <button class="card-edit-btn card-link-edit" onclick="event.stopPropagation();openEditNote('${(n.id||'').replace(/'/g,"\\'")}')">编辑</button>
           <div class="card-title">${escapeHtml(n.title||'无标题')}</div>
@@ -622,6 +754,10 @@ function render() {
 
 // ===== 交互 =====
 function toggleMemo(el) { el.classList.toggle('expanded'); }
+function openLink(noteId) {
+  const note = __NOTES__.find(n => n.id === noteId);
+  if (note && note.link) window.open(note.link, '_blank', 'noopener');
+}
 function copyNote(btn, noteId) {
   const note = __NOTES__.find(n => n.id === noteId); if (!note) return;
   let text = note.title + '\n\n'; if (note.summary) text += note.summary + '\n\n'; if (note.content) text += note.content; if (note.link) text += '\n\n链接：' + note.link;
@@ -683,6 +819,7 @@ async function saveNote() {
       const idx = __NOTES__.findIndex(n => n.id === __EDITING_ID__);
       if (idx >= 0) __NOTES__[idx] = updated;
       __EDITING_ID__ = null;
+      await saveNotesToLocalCache(__NOTES__);
       render();
       showSyncStatus('修改已加密保存！', 'success');
     } else {
@@ -690,10 +827,26 @@ async function saveNote() {
       if (link) note.link = link; if (content) note.content = content;
       const saved = await insertNote(note);
       __NOTES__.unshift(saved);
+      await saveNotesToLocalCache(__NOTES__);
       render();
       showSyncStatus('已加密保存！', 'success');
     }
-  } catch(e) { console.log('保存失败:', e); showSyncStatus('保存失败，请检查网络后重试', 'warn'); }
+  } catch(e) {
+    console.log('保存失败:', e);
+    if (__EDITING_ID__) {
+      const idx = __NOTES__.findIndex(n => n.id === __EDITING_ID__);
+      const updatedLocal = { ...(idx >= 0 ? __NOTES__[idx] : {}), title, category, tags, summary: summary||'', source: source||'', link: link||null, content: content||'' };
+      if (idx >= 0) __NOTES__[idx] = updatedLocal; else __NOTES__.unshift(updatedLocal);
+      __EDITING_ID__ = null;
+    } else {
+      const note = { id: 'n' + Date.now().toString(36), title, category, tags, summary: summary||'', source: source||'', created_at: new Date().toISOString() };
+      if (link) note.link = link; if (content) note.content = content;
+      __NOTES__.unshift(note);
+    }
+    await saveNotesToLocalCache(__NOTES__);
+    render();
+    showSyncStatus('云端保存失败，已保存到本地缓存', 'warn');
+  }
 }
 
 async function deleteNote(noteId) {
@@ -711,12 +864,14 @@ function showSyncStatus(msg, type) {
 }
 
 // ===== 初始化 =====
-initLockScreen();
+bootLockScreen();
 
 // ===== PWA Service Worker =====
-if ('serviceWorker' in navigator) {
-  caches.keys().then(keys => keys.forEach(k => caches.delete(k)));
-  navigator.serviceWorker.getRegistrations().then(regs => regs.forEach(r => r.unregister()));
+// 注册离线缓存（network-first 策略，有网时始终拿最新）
+if ('serviceWorker' in navigator && location.protocol === 'https:') {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+  });
 }
 </script>
 </body>
